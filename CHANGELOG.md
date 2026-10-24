@@ -50,6 +50,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   same properties at different positions share one entry.
 - Commands to add, delete and list a wood part's cuts (Dado, Groove, Rabbet, Slot, Notch,
   Pocket), each drawn as a small marker.
+- Commands for a wood part's joinery (Mortise, Tenon, Biscuit, each drawn as a small marker),
+  its Joint type, and its End treatments (checked against the WoodCraft settings list).
 
 ## [0.10.0] - 2026-10-23
 

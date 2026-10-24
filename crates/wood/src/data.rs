@@ -117,6 +117,48 @@ pub struct CutEntry {
     pub at: Vec<At>,
 }
 
+/// One Mortise, Tenon or Biscuit entry: the values shared by every instance in its `at` list,
+/// plus the positions themselves. `Tolerance` (the snug-fit allowance) applies to Mortise and
+/// Tenon only; Biscuit has neither `Depth` nor `Tolerance`.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct JoineryEntry {
+    #[serde(rename = "Face / Edge")]
+    pub face_edge: String,
+    #[serde(rename = "Length")]
+    pub length: f64,
+    #[serde(rename = "Width")]
+    pub width: f64,
+    #[serde(rename = "Depth", default, skip_serializing_if = "Option::is_none")]
+    pub depth: Option<f64>,
+    #[serde(rename = "Tolerance", default, skip_serializing_if = "Option::is_none")]
+    pub tolerance: Option<f64>,
+    #[serde(rename = "At")]
+    pub at: Vec<At>,
+}
+
+/// A `Joint type` entry: which joint a part's end or edge makes, and to which other part — a
+/// selector, not a positioned feature, so it has no `At` list.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct JointTypeEntry {
+    #[serde(rename = "Joint code")]
+    pub joint_code: String,
+    #[serde(rename = "Mating Part ID")]
+    pub mating_part_id: String,
+    #[serde(rename = "Tolerance", default, skip_serializing_if = "Option::is_none")]
+    pub tolerance: Option<f64>,
+}
+
+/// An `End treatment` entry: one end or edge's chosen treatment (from the WoodCraft settings
+/// list seeded in Phase 4). Each board has End A and End B; a treatment never changes the
+/// part's total length.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct EndTreatmentEntry {
+    #[serde(rename = "Edge / End")]
+    pub edge_end: String,
+    #[serde(rename = "Profile")]
+    pub profile: String,
+}
+
 /// One part. The properties the first slice knows are fields; every other property is kept in
 /// `other` exactly as read, so a later version of the property list is never lost on save.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -161,6 +203,16 @@ pub struct Part {
     pub cut_notch: Vec<CutEntry>,
     #[serde(rename = "Cut-Pocket", default, skip_serializing_if = "Vec::is_empty")]
     pub cut_pocket: Vec<CutEntry>,
+    #[serde(rename = "Mortise", default, skip_serializing_if = "Vec::is_empty")]
+    pub mortise: Vec<JoineryEntry>,
+    #[serde(rename = "Tenon", default, skip_serializing_if = "Vec::is_empty")]
+    pub tenon: Vec<JoineryEntry>,
+    #[serde(rename = "Biscuit", default, skip_serializing_if = "Vec::is_empty")]
+    pub biscuit: Vec<JoineryEntry>,
+    #[serde(rename = "Joint type", default, skip_serializing_if = "Vec::is_empty")]
+    pub joint_type: Vec<JointTypeEntry>,
+    #[serde(rename = "End treatment", default, skip_serializing_if = "Vec::is_empty")]
+    pub end_treatment: Vec<EndTreatmentEntry>,
     #[serde(flatten)]
     pub other: BTreeMap<String, Value>,
 }
@@ -199,6 +251,11 @@ impl Part {
             cut_slot: Vec::new(),
             cut_notch: Vec::new(),
             cut_pocket: Vec::new(),
+            mortise: Vec::new(),
+            tenon: Vec::new(),
+            biscuit: Vec::new(),
+            joint_type: Vec::new(),
+            end_treatment: Vec::new(),
             other: BTreeMap::new(),
         }
     }

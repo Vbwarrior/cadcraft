@@ -1395,3 +1395,11 @@
 	Add Wood Part Cut	Додати виріз деталі
 	Delete Wood Part Cut	Видалити виріз деталі
 	Wood Part Cuts	Вирізи деталі з дерева
+	Add Wood Part Joinery	Додати з'єднання деталі
+	Delete Wood Part Joinery	Видалити з'єднання деталі
+	Wood Part Joinery	З'єднання деталі з дерева
+	Set Wood Part Joint Type	Встановити тип з'єднання деталі
+	Clear Wood Part Joint Type	Очистити тип з'єднання деталі
+	Set Wood Part End Treatment	Встановити обробку торця деталі
+	Clear Wood Part End Treatment	Очистити обробку торця деталі
+	Wood Part Joint Info	Інформація про з'єднання деталі

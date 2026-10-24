@@ -220,6 +220,31 @@ a position.
 
 ---
 
+## Phase 6, group 4: joinery, joint type and end treatments
+
+Eight commands: `woodjoineryadd`, `woodjoinerydelete`, `woodjoinery`, `woodjointtypeset`,
+`woodjointtypeclear`, `woodendtreatmentset`, `woodendtreatmentclear`, `woodjointinfo`.
+
+1. Select the part and type `woodjoineryadd`. Give it kind `Mortise`, a face/edge, a point,
+   length, width, and depth. Zoom to extents — you should see a small triangle mark.
+2. Type `woodjoinery` — you should see your mortise listed.
+3. Type `woodjointtypeset` and give it a joint code (like `Tenon`) and a mating part ID (any
+   text — it's meant to be another part's identifier). Type `woodjointinfo` — you should see it
+   listed.
+4. Type `woodendtreatmentset` with an edge/end (like `End A`) and a profile. Try a made-up
+   profile name first — it should refuse, since the profile has to be one from the End
+   treatment list (the same list from Phase 4's settings). Then try a real one, like `Tenon`.
+5. Type `woodjointinfo` again — you should see your end treatment listed alongside the joint
+   type.
+6. Set another end treatment for the same `End A` with a different profile — it should replace
+   the old one, not add a second.
+
+**What to look for:** step 4 correctly refuses a profile that isn't in the settings list. Step
+6 replaces rather than duplicates. The joint type always shows just one entry, however many
+times you set it.
+
+---
+
 ## After testing
 
 Tell me which of Phase 1, 2, 3, 4, 5, 6 (or a part of 6, since it's being built in groups) are
