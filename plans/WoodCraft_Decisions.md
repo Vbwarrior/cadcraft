@@ -48,3 +48,13 @@ Every decision made so far, so Claude Code never asks twice. Claude Code adds a 
     rather than assuming symmetry. Flagged for Chris: if `Joint code` should also be restricted
     to the "Joint type" settings list, say so and it'll be made consistent with `End treatment`.
 
+20. **(Oct 24, 2026)** Phase 7 (warnings engine): no document in `plans/` gives a numeric
+    formula for "joint fit warnings (too tight or too loose against the tolerance settings)."
+    Implemented reading: a Mortise/Tenon entry's own `Tolerance` field is the gap checked; it
+    must be at least `minimumJointSpacing` (too tight otherwise), and if the part has a `Joint
+    type` entry whose `Joint code` matches a key in `jointToleranceByType`, the tolerance must
+    not exceed `minimumJointSpacing` plus that type's extra allowance (too loose otherwise),
+    per the settings description "extra gap above the minimum." Biscuit is exempt (the sheet
+    gives it no `Tolerance`). `JointTypeEntry`'s own `tolerance` field is not used by this
+    check. Flagged for Chris: if the real rule differs, say so and the check will be corrected.
+

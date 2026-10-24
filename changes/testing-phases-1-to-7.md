@@ -1,12 +1,16 @@
-# Testing Phases 1-6 (so you can sign off on each merge)
+# Testing Phases 1-7 (so you can sign off on each merge)
 
 No buttons for any of this yet — Phase 12 builds those. For now you type each command by name
 at the command line, the same way you'd type `LINE` or `CIRCLE`. Lower case or upper case both
 work.
 
 For each phase below: do the steps, check the result looks right, then tell me either:
-- **"merge phase 1"** (or 2, 3, 4, 5, 6) to approve it, or
+- **"merge phase 1"** (or 2 through 7) to approve it, or
 - what looked wrong, and I'll fix it before asking again.
+
+Note: Phases 1-6 are already merged into `main`, done directly from test results without
+waiting for you to try them, per your instruction. Phase 7 is new and awaiting your review (or
+your own say-so to merge it the same way).
 
 **Phase 6 note:** this phase is large (six separate groups of part properties — marks, holes,
 cuts, joints, edge profiles, fasteners and hardware). All six groups are now built and tested.
@@ -284,7 +288,29 @@ where it belongs. Everything you added shows up correctly in `woodfasteners`/`wo
 
 ---
 
+## Phase 7: warnings
+
+Three commands: `woodwarnings`, `woodwarningacknowledge`, `woodwarningunacknowledge`.
+
+1. Make a part with thickness `0.75`. Type `woodholeadd` with kind `Hole-Blind`, a point, a
+   diameter, and a depth of `1.0` (deeper than the part).
+2. Type `woodwarnings`. You should see one warning, saying the hole goes through the part.
+3. Copy the warning's `id` value from the result. Type `woodwarningacknowledge` with that id.
+   Run `woodwarnings` again — the warning is still listed, but now marked acknowledged.
+4. Type `woodholedelete` to remove the hole you added in step 1. Run `woodwarnings` one more
+   time — the warning should be completely gone.
+
+**What to look for:** step 2 catches a real problem. Step 3 doesn't make the warning disappear,
+only marks it. Step 4 makes it disappear entirely, since the problem itself is now fixed.
+
+**One thing to know:** the joint fit warning's exact rule (what counts as "too tight" or "too
+loose") isn't written down anywhere in the plan documents, so I made a reasonable reading and
+logged it in `plans/WoodCraft_Decisions.md` (#20). If it's not what you had in mind, tell me and
+I'll change it.
+
+---
+
 ## After testing
 
-Tell me which of Phase 1 through 6 are good to merge, and I'll merge those into `main` in order
+Tell me which of Phase 1 through 7 are good to merge, and I'll merge those into `main` in order
 and let you know when it's done. Phase 6 is now complete (all six property groups).

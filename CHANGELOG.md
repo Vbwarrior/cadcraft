@@ -57,6 +57,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Commands for a wood part's Glue, Screw, Nail and Dowel fasteners, and its Hinge, Drawer slide
   and Drawer Pull hardware (type checked against the WoodCraft settings lists), each drawn as a
   small marker. This completes all six WoodCraft property groups.
+- A warnings engine: a running, computed list of fastener, joint fit and build-size warnings
+  across a drawing's wood parts, with commands to read it and to acknowledge or un-acknowledge
+  one warning for the current session.
 
 ## [0.10.0] - 2026-10-23
 
