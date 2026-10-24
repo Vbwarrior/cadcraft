@@ -9,9 +9,7 @@ For each phase below: do the steps, check the result looks right, then tell me e
 - what looked wrong, and I'll fix it before asking again.
 
 **Phase 6 note:** this phase is large (six separate groups of part properties — marks, holes,
-cuts, joints, edge profiles, fasteners). It's being built and tested one group at a time, each
-on this same branch. This guide gets a new section added as each group is finished, so you don't
-have to wait for all six before trying the ones that are ready.
+cuts, joints, edge profiles, fasteners and hardware). All six groups are now built and tested.
 
 You can test the phases in any order, or all in one sitting.
 
@@ -263,7 +261,30 @@ independent of each other and of Edge profile — setting one doesn't touch the 
 
 ---
 
+## Phase 6, group 6: fasteners and hardware
+
+Twelve commands: `woodglueset`, `woodglueclear`, `woodscrewadd`, `woodscrewdelete`,
+`woodnailadd`, `woodnaildelete`, `wooddowelfastenadd`, `wooddowelfastendelete`,
+`woodfasteners`, `woodhardwareadd`, `woodhardwaredelete`, `woodhardware`.
+
+1. Select the part and type `woodglueset` with a face/edge and a glue type (type `Wood glue`).
+2. Type `woodscrewadd` with a face/edge, a screw type (`Phillips` or `Flat head`), a point and a
+   size. Zoom to extents — a small plus-shaped mark should appear.
+3. Type `woodnailadd` with a face/edge, a point, a diameter and a length (no type — nails don't
+   have one).
+4. Type `woodfasteners` — you should see your glue, screw and nail all listed.
+5. Type `woodhardwareadd` with kind `Hinge`, a face, a type (`Hinge`), and a point. A different
+   small mark should appear.
+6. Try adding a `Drawer slide` without a size — it should refuse, since a drawer slide needs
+   one. A `Hinge` with a size should also refuse, since hinges are location-only.
+7. Type `woodhardware` — you should see your hinge listed.
+
+**What to look for:** nails never ask for or show a type. Step 6 correctly enforces size only
+where it belongs. Everything you added shows up correctly in `woodfasteners`/`woodhardware`.
+
+---
+
 ## After testing
 
-Tell me which of Phase 1, 2, 3, 4, 5, 6 (or a part of 6, since it's being built in groups) are
-good to merge, and I'll merge those into `main` in order and let you know when it's done.
+Tell me which of Phase 1 through 6 are good to merge, and I'll merge those into `main` in order
+and let you know when it's done. Phase 6 is now complete (all six property groups).

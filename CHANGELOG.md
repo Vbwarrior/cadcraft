@@ -54,6 +54,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   its Joint type, and its End treatments (checked against the WoodCraft settings list).
 - Commands for a wood part's Edge profile (checked against the WoodCraft settings list), Bevel
   and Miter.
+- Commands for a wood part's Glue, Screw, Nail and Dowel fasteners, and its Hinge, Drawer slide
+  and Drawer Pull hardware (type checked against the WoodCraft settings lists), each drawn as a
+  small marker. This completes all six WoodCraft property groups.
 
 ## [0.10.0] - 2026-10-23
 

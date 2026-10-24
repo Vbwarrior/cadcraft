@@ -181,6 +181,60 @@ pub struct AngleEntry {
     pub angle: f64,
 }
 
+/// A `Glue` entry: which face or edge gets glue, and of what type (from the WoodCraft settings'
+/// Glue type list). Not a positioned feature — no `X`/`Y`, no `At`.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct GlueEntry {
+    #[serde(rename = "Face / Edge")]
+    pub face_edge: String,
+    #[serde(rename = "Type")]
+    pub glue_type: String,
+}
+
+/// A `Screw` or `Dowel` entry: the values shared by every instance in its `at` list, plus the
+/// positions themselves. `Type` applies to Screw only (from the settings' Screw type list);
+/// Dowel has no type, only a `Size`.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct FastenerEntry {
+    #[serde(rename = "Face / Edge")]
+    pub face_edge: String,
+    #[serde(rename = "Type", default, skip_serializing_if = "Option::is_none")]
+    pub fastener_type: Option<String>,
+    #[serde(rename = "Size")]
+    pub size: f64,
+    #[serde(rename = "At")]
+    pub at: Vec<At>,
+}
+
+/// A `Nail` entry: defined by diameter and length (`Wood_Workflow_Scope.md`: "Nails are defined
+/// by diameter and length"), not by a settings-list type or a single `Size`.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct NailEntry {
+    #[serde(rename = "Face / Edge")]
+    pub face_edge: String,
+    #[serde(rename = "Diameter")]
+    pub diameter: f64,
+    #[serde(rename = "Length")]
+    pub length: f64,
+    #[serde(rename = "At")]
+    pub at: Vec<At>,
+}
+
+/// A `Hinge`, `Drawer slide` or `Drawer Pull` entry: a hardware marker's face, type (from the
+/// settings' Hardware type list) and position. `Size` applies to Drawer slide only; Hinge and
+/// Drawer Pull are "location only."
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct HardwareEntry {
+    #[serde(rename = "Face")]
+    pub face: Face,
+    #[serde(rename = "Type")]
+    pub hardware_type: String,
+    #[serde(rename = "Size", default, skip_serializing_if = "Option::is_none")]
+    pub size: Option<f64>,
+    #[serde(rename = "At")]
+    pub at: Vec<At>,
+}
+
 /// One part. The properties the first slice knows are fields; every other property is kept in
 /// `other` exactly as read, so a later version of the property list is never lost on save.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -241,6 +295,20 @@ pub struct Part {
     pub bevel: Vec<AngleEntry>,
     #[serde(rename = "Miter", default, skip_serializing_if = "Vec::is_empty")]
     pub miter: Vec<AngleEntry>,
+    #[serde(rename = "Glue", default, skip_serializing_if = "Vec::is_empty")]
+    pub glue: Vec<GlueEntry>,
+    #[serde(rename = "Screw", default, skip_serializing_if = "Vec::is_empty")]
+    pub screw: Vec<FastenerEntry>,
+    #[serde(rename = "Nail", default, skip_serializing_if = "Vec::is_empty")]
+    pub nail: Vec<NailEntry>,
+    #[serde(rename = "Dowel", default, skip_serializing_if = "Vec::is_empty")]
+    pub dowel: Vec<FastenerEntry>,
+    #[serde(rename = "Hinge", default, skip_serializing_if = "Vec::is_empty")]
+    pub hinge: Vec<HardwareEntry>,
+    #[serde(rename = "Drawer slide", default, skip_serializing_if = "Vec::is_empty")]
+    pub drawer_slide: Vec<HardwareEntry>,
+    #[serde(rename = "Drawer Pull", default, skip_serializing_if = "Vec::is_empty")]
+    pub drawer_pull: Vec<HardwareEntry>,
     #[serde(flatten)]
     pub other: BTreeMap<String, Value>,
 }
@@ -287,6 +355,13 @@ impl Part {
             edge_profile: Vec::new(),
             bevel: Vec::new(),
             miter: Vec::new(),
+            glue: Vec::new(),
+            screw: Vec::new(),
+            nail: Vec::new(),
+            dowel: Vec::new(),
+            hinge: Vec::new(),
+            drawer_slide: Vec::new(),
+            drawer_pull: Vec::new(),
             other: BTreeMap::new(),
         }
     }
