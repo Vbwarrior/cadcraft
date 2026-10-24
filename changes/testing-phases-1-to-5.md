@@ -1,11 +1,11 @@
-# Testing Phases 1-4 (so you can sign off on each merge)
+# Testing Phases 1-5 (so you can sign off on each merge)
 
 No buttons for any of this yet — Phase 12 builds those. For now you type each command by name
 at the command line, the same way you'd type `LINE` or `CIRCLE`. Lower case or upper case both
 work.
 
 For each phase below: do the steps, check the result looks right, then tell me either:
-- **"merge phase 1"** (or 2, 3, 4) to approve it, or
+- **"merge phase 1"** (or 2, 3, 4, 5) to approve it, or
 - what looked wrong, and I'll fix it before asking again.
 
 You can test the phases in any order, or all in one sitting.
@@ -116,7 +116,37 @@ settings command runs.
 
 ---
 
+## Phase 5: reading a part's edges
+
+One command: `woodedges`. This reads a part's outline and names each side (Top, Bottom, Left,
+Right), tells you whether it's a straight flat edge or an angled one, and whether it's an arc
+(a rounded corner from Fillet).
+
+1. Draw a rectangle: `rectang`, two corners.
+2. Select it and run `woodpart` with a name and thickness, same as before.
+3. Select the part and type `woodedges`. You should see four edges named exactly `Bottom`,
+   `Right`, `Top`, `Left`, each marked flat, none of them an arc.
+4. Make a shape with one slanted side instead — draw a polyline with `pline` where one side
+   leans (not perfectly up-and-down or side-to-side), close it, and make it a wood part the same
+   way. Run `woodedges` on it. The leaning side should come back named something like
+   `Right Angle` instead of just `Right`, and marked **not** flat.
+5. If you'd like to try a rounded corner: draw a rectangle, run `fillet` on one corner with a
+   small radius, then make that into a wood part and run `woodedges`. The rounded corner should
+   come back marked as an arc.
+
+**What to look for:** step 3's four names are exactly Bottom/Right/Top/Left with nothing extra.
+Step 4's leaning side is named with "Angle" and marked not flat; the three straight sides keep
+their plain names. Step 5's rounded corner is marked as an arc.
+
+**One more thing you can try:** the straightness tolerance setting (from Phase 4) controls how
+close to flat counts as flat. Run `woodsettingsset` with `straightnessTolerance: 2` (2 degrees)
+before step 4 — a side that's leaning by less than 2 degrees should then come back marked flat
+instead of angled. Run `woodsettingsset` with `straightnessTolerance: 0` afterward to put it
+back to the default.
+
+---
+
 ## After testing
 
-Tell me which of Phase 1, 2, 3, 4 are good to merge, and I'll merge those into `main` in order
-and let you know when it's done.
+Tell me which of Phase 1, 2, 3, 4, 5 are good to merge, and I'll merge those into `main` in
+order and let you know when it's done.

@@ -59,6 +59,7 @@
   <a href="#what-works-today">What works today</a> ·
   <a href="#quick-start">Quick start</a> ·
   <a href="#drive-it-from-agents-mcp-and-the-cli">Agents, MCP and the CLI</a> ·
+  <a href="#woodcraft">WoodCraft</a> ·
   <a href="#architecture">Architecture</a> ·
   <a href="#roadmap">Roadmap</a> ·
   <a href="#downloads">Downloads</a> ·
@@ -230,6 +231,86 @@ MCP tools include `command_line` (type at the prompt), `execute` (any command wi
 
 To run LISP routines, scripts and alias files, or to drive CADCraft from your own programs, see
 [docs/customization.md](docs/customization.md).
+
+## WoodCraft
+
+This fork adds **WoodCraft**: wood-specific drafting on top of CADCraft's standard 2D (closed
+outlines become named, trackable parts with their own properties, stored alongside the drawing
+geometry). WoodCraft has no buttons, panels or menus yet — every one of its features is wired up
+as a command first, so it can already be driven from the command line or JSON exactly like any
+other CADCraft command, while its interface is still being built.
+
+A **part** is a closed outline (a closed polyline or a circle) made into a wood part with
+`woodpart`: the outline becomes a named block and the properties you gave it (name, thickness,
+and so on) are stored with the drawing. The commands below work the same at the command line
+(type the id, answer its prompts) or as JSON (`{"command": "woodpart", "params": {...}}` over
+the control channel, MCP, or `cadcraft-cli`).
+
+### Project files
+
+| Command | Parameters | What it does |
+|---|---|---|
+| `woodnew` | — | Starts a new, empty WoodCraft project. |
+| `woodopen` | `{path}` (must end in `.wood`) | Opens a `.wood` project file. Refuses any other file. |
+| `woodsave` | `{path?}` | Saves the current project, to its existing path or a new one. |
+| `woodsaveas` | `{path}` (must end in `.wood`) | Saves the current project to a new `.wood` file. |
+
+A `.wood` file is a DXF file with the `.wood` extension; it holds the drawing geometry and every
+part's properties together.
+
+### Making and querying parts
+
+| Command | Parameters | What it does |
+|---|---|---|
+| `woodpart` | `{name, thickness, commonSize?: {name, width, thickness}, grainDirection?, handles?}` | Turns the selected closed outline into a named wood part with the given properties. |
+| `woodparts` | `{}` | Lists every part in the drawing (GUID, name, thickness, revision). |
+| `woodpartinfo` | `{handle?}` (default: the selection) | Returns one part's full properties. |
+| `wooddisplayname` | `{block}` | The display name for a block, or the block name unchanged if it isn't a wood part. The internal identifier is never shown to the user. |
+| `woodthickness` | `{handle?, thickness}` | Sets a part's Thickness. |
+| `woodgrain` | `{handle?, grainDirection?}` | Sets or clears a part's Grain direction. |
+| `woodname` | `{handle?, name}` | Renames a part (its display name only; the underlying block name never changes). |
+| `woodedges` | `{handle?}` (default: the selection) | Reads a part's outline into its named edges (`Top`, `Top A`, `Top Angle`, …), each marked flat or angled, and arc or straight. |
+
+A part shared by more than one copy (see Copy Wood Part Array below) refuses `woodthickness`,
+`woodgrain` and `woodname` until it's split; see Split Wood Part Array.
+
+### Copying and arrays
+
+| Command | Parameters | What it does |
+|---|---|---|
+| `woodcopy` | `{handle?, to}` | Makes a wholly independent copy of a part (new identity, name ending in " -Copy"). |
+| `woodcopyarray` | `{handle?, to}` | Places another copy that shares the original's properties; editing one edits all of them. |
+| `wooddelete` | `{handles?}` | Erases the selected copy or copies; once a part's last copy is gone, its properties are removed too. |
+| `woodsplitarray` / `woodremovefrom` | `{handles}` | Each selected copy becomes its own independent part (two command names for the same action). Refuses the whole operation if any pick isn't a copy of a part. |
+| `woodexplodearray` | `{handle?}` | Splits every copy of the selected part at once, so none of them are shared anymore. |
+
+### Settings, Common size presets and lists
+
+A settings file, separate from any drawing, shared by every project you open
+(`%APPDATA%\WoodCraft\settings.json` on Windows; the platform equivalent elsewhere).
+
+| Command | Parameters | What it does |
+|---|---|---|
+| `woodsettingsget` | `{}` | Returns the whole settings file. |
+| `woodsettingsset` | `{straightnessTolerance?, units?, minimumJointSpacing?, jointToleranceByType?, buildSizeLimits?, blockExportOnFastenerWarnings?, gitTimerMinutes?}` | Changes only the settings given; everything else is left as it was. |
+| `woodsizeadd` | `{name, width, thickness}` | Adds a Common size preset. |
+| `woodsizerename` | `{name, newName}` | Renames a Common size preset. |
+| `woodsizedelete` | `{name}` | Deletes a Common size preset. |
+| `woodlistadd` | `{list, entry}` | Adds an entry to one of the managed lists (`Joint type`, `Edge profile`, `Glue type`, `Screw type`, `Hardware type`, `End treatment`). |
+| `woodlistrename` | `{list, entry, newEntry}` | Renames a list entry. |
+| `woodlistdelete` | `{list, entry}` | Deletes a list entry. |
+
+Common size presets come seeded with standard lumber sizes (1x2 through 2x8 at real inch
+dimensions); the six lists come seeded from WoodCraft's own property sheet. All of the above are
+refused, with nothing changed, on a bad or duplicate name.
+
+### Where this is headed
+
+WoodCraft is being built phase by phase: outline analysis for edge names is done; part
+properties (holes, cuts, joints, edge profiles, fasteners), a warnings list, SCAD export and
+project history come next; buttons, panels and menus are the last phase, once everything above
+already works as a command. See `plans/WoodCraft_Implementation_Plan.md` in this repository for
+the full plan.
 
 ## Architecture
 

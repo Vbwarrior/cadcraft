@@ -37,6 +37,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Common size presets (standard lumber sizes seeded in) and six managed lists (joint type, edge
   profile, glue, screw, hardware, end treatment), each with commands to add, rename and delete an
   entry.
+- A command that reads a wood part's outline into its named edges (Top, Bottom, Left, Right,
+  lettered when a side has more than one, and "Angle" for one that isn't flat), honoring the
+  straightness tolerance setting. Fillet and chamfer corners already in the outline are read
+  correctly, arcs staying arcs.
+- A WoodCraft section in the README listing every command built so far, with its parameters and
+  what it does.
 
 ## [0.10.0] - 2026-10-23
 
