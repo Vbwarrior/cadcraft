@@ -25,3 +25,13 @@ Every decision made so far, so Claude Code never asks twice. Claude Code adds a 
 
 ## Decisions Claude Code makes on its own (add below)
 
+18. **(Oct 23, 2026, Chris)** Chris's global CLAUDE.md rules (changelog, README, research-temp,
+    git discipline, etc.) apply in full to this repo and this fork, in Rust as much as in C#.
+    Nothing here is .NET-only by default; only use a rule's own stated scope (e.g. "xUnit" is
+    .NET-specific wording, but its *intent*, tests alongside every new public item, still holds
+    here via WoodCraft's own test rules). A `CHANGELOG.md` was added at the repo root per the
+    global Changelog Rules, with a backfilled Phase 0 entry (`chore/changelog-setup` branch, not
+    yet merged). README updates: skipped for Phase 0 (no user-facing change yet — no UI exists
+    before Phase 12), but required starting Phase 1 onward wherever usage (CLI/JSON commands)
+    changes, in the same commit as the change, per the global rule.
+
