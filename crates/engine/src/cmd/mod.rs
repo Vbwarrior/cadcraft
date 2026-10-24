@@ -57,6 +57,7 @@ mod wood_joints;
 mod wood_marks;
 mod wood_query;
 mod wood_settings;
+mod wood_warnings;
 
 pub mod curves;
 pub mod helpers;
@@ -232,6 +233,7 @@ pub fn command_specs() -> &'static [CommandSpec] {
         v.extend(wood_marks::specs());
         v.extend(wood_query::specs());
         v.extend(wood_settings::specs());
+        v.extend(wood_warnings::specs());
         v
     })
 }

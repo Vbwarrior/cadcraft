@@ -11,6 +11,7 @@ pub mod guid;
 pub mod settings_data;
 pub mod settings_store;
 pub mod store;
+pub mod warnings;
 
 pub use data::{CommonSize, Part, WoodData};
 pub use edges::{Edge, EdgeError, Side};

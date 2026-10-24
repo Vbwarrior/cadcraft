@@ -694,6 +694,11 @@ pub struct Session {
     lisp_last: Option<std::result::Result<lisp::value::Value, String>>,
     /// What the last HATCHPICK kept (the Hatch and Gradient dialog's picks).
     pub hatch_picks: Option<cmd::hatch::HatchPicks>,
+    /// WoodCraft warning IDs the user has acknowledged and overridden, for one export only
+    /// (`plans/Wood_Workflow_Scope.md`: "An override lasts for one export only. The next export
+    /// asks again. Nothing about it is saved in the file."). Session-only: never part of
+    /// `Drawing`/`WoodData`, never saved, never carried by undo/redo.
+    pub acknowledged_wood_warnings: std::collections::HashSet<String>,
 }
 
 impl Default for Session {
@@ -743,6 +748,7 @@ impl Session {
             lisp: lisp::LispState::default(),
             lisp_last: None,
             hatch_picks: None,
+            acknowledged_wood_warnings: std::collections::HashSet::new(),
         }
     }
     pub fn new_drawing(&mut self, metric: bool) -> usize {
