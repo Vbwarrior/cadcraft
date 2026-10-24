@@ -1403,3 +1403,10 @@
 	Set Wood Part End Treatment	Встановити обробку торця деталі
 	Clear Wood Part End Treatment	Очистити обробку торця деталі
 	Wood Part Joint Info	Інформація про з'єднання деталі
+	Set Wood Part Edge Profile	Встановити профіль кромки деталі
+	Clear Wood Part Edge Profile	Очистити профіль кромки деталі
+	Set Wood Part Bevel	Встановити фаску деталі
+	Clear Wood Part Bevel	Очистити фаску деталі
+	Set Wood Part Miter	Встановити зрізання під кутом деталі
+	Clear Wood Part Miter	Очистити зрізання під кутом деталі
+	Wood Part Edge Properties	Властивості кромки деталі

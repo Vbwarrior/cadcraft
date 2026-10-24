@@ -245,6 +245,24 @@ times you set it.
 
 ---
 
+## Phase 6, group 5: edge profile, bevel and miter
+
+Seven commands: `woodedgeprofileset`, `woodedgeprofileclear`, `woodbevelset`, `woodbevelclear`,
+`woodmiterset`, `woodmiterclear`, `woodedgeinfo`.
+
+1. Select the part and type `woodedgeprofileset`. Give it an edge/end (type `Top`), a profile
+   (type `Round-over` — one of the names from the Edge profile list in settings), and a size.
+2. Type `woodedgeinfo` — you should see it listed.
+3. Try the same command again with a made-up profile name — it should refuse.
+4. Type `woodbevelset` with an edge/end and an angle (in degrees). Type `woodmiterset` the same
+   way on a different edge/end. Type `woodedgeinfo` again — you should see all three listed
+   together.
+
+**What to look for:** an unrecognized profile name is always refused. Bevel and Miter are
+independent of each other and of Edge profile — setting one doesn't touch the others.
+
+---
+
 ## After testing
 
 Tell me which of Phase 1, 2, 3, 4, 5, 6 (or a part of 6, since it's being built in groups) are

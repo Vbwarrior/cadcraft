@@ -159,6 +159,28 @@ pub struct EndTreatmentEntry {
     pub profile: String,
 }
 
+/// An `Edge profile` entry: one edge or end's chosen router profile (from the WoodCraft
+/// settings list seeded in Phase 4) and its size (for example a 3/4" round-over).
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct EdgeProfileEntry {
+    #[serde(rename = "Edge / End")]
+    pub edge_end: String,
+    #[serde(rename = "Profile")]
+    pub profile: String,
+    #[serde(rename = "Size")]
+    pub size: f64,
+}
+
+/// A `Bevel` or `Miter` entry: one edge or end's angle. Both properties share this shape; only
+/// the key they are stored under differs.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct AngleEntry {
+    #[serde(rename = "Edge / End")]
+    pub edge_end: String,
+    #[serde(rename = "Angle")]
+    pub angle: f64,
+}
+
 /// One part. The properties the first slice knows are fields; every other property is kept in
 /// `other` exactly as read, so a later version of the property list is never lost on save.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -213,6 +235,12 @@ pub struct Part {
     pub joint_type: Vec<JointTypeEntry>,
     #[serde(rename = "End treatment", default, skip_serializing_if = "Vec::is_empty")]
     pub end_treatment: Vec<EndTreatmentEntry>,
+    #[serde(rename = "Edge profile", default, skip_serializing_if = "Vec::is_empty")]
+    pub edge_profile: Vec<EdgeProfileEntry>,
+    #[serde(rename = "Bevel", default, skip_serializing_if = "Vec::is_empty")]
+    pub bevel: Vec<AngleEntry>,
+    #[serde(rename = "Miter", default, skip_serializing_if = "Vec::is_empty")]
+    pub miter: Vec<AngleEntry>,
     #[serde(flatten)]
     pub other: BTreeMap<String, Value>,
 }
@@ -256,6 +284,9 @@ impl Part {
             biscuit: Vec::new(),
             joint_type: Vec::new(),
             end_treatment: Vec::new(),
+            edge_profile: Vec::new(),
+            bevel: Vec::new(),
+            miter: Vec::new(),
             other: BTreeMap::new(),
         }
     }
