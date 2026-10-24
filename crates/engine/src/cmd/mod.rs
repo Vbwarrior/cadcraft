@@ -48,6 +48,7 @@ mod wood;
 mod wood_array;
 mod wood_file;
 mod wood_query;
+mod wood_settings;
 
 pub mod curves;
 pub mod helpers;
@@ -214,6 +215,7 @@ pub fn command_specs() -> &'static [CommandSpec] {
         v.extend(wood_array::specs());
         v.extend(wood_file::specs());
         v.extend(wood_query::specs());
+        v.extend(wood_settings::specs());
         v
     })
 }

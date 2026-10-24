@@ -30,6 +30,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   part shared by more than one instance is refused until it is split.
 - WoodCraft plan documents under `plans/`, and a `changes/` folder recording what each WoodCraft
   phase adds.
+- A WoodCraft settings file, separate from any drawing, holding straightness tolerance, units,
+  minimum joint spacing, per-joint-type tolerance, the three build-size limits, whether export is
+  blocked while fastener warnings exist, and the git timer interval. Commands to read and change
+  it.
+- Common size presets (standard lumber sizes seeded in) and six managed lists (joint type, edge
+  profile, glue, screw, hardware, end treatment), each with commands to add, rename and delete an
+  entry.
 
 ## [0.10.0] - 2026-10-23
 
