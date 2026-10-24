@@ -200,6 +200,26 @@ creates a new entry instead of merging. Step 6's delete only removes the one poi
 
 ---
 
+## Phase 6, group 3: cuts
+
+Three commands: `woodcutadd`, `woodcutdelete`, `woodcuts`.
+
+1. Select the part and type `woodcutadd`. Give it kind `Cut-Dado`, a face/edge (type `A`), a
+   point, a length, a width, and a depth.
+2. Zoom to extents. You should see a small square where you placed it.
+3. Type `woodcuts`. You should see your dado listed with the values you gave it.
+4. Try adding a `Cut-Slot` without an angle — it should refuse, since a slot needs one.
+5. Try adding a `Cut-Rabbet` **with** a point — it should refuse, since a rabbet runs along a
+   whole edge and doesn't take a position. Add it again without a point; that should work.
+6. Type `woodcutdelete` with kind `Cut-Rabbet` and no point — it should remove that whole entry
+   in one go, since a rabbet has nothing to pick a position from.
+
+**What to look for:** each cut kind asks for only the fields that make sense for it, and
+refuses when you give it one it doesn't use or leave out one it needs. A rabbet never asks for
+a position.
+
+---
+
 ## After testing
 
 Tell me which of Phase 1, 2, 3, 4, 5, 6 (or a part of 6, since it's being built in groups) are

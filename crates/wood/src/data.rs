@@ -94,6 +94,29 @@ pub struct HoleEntry {
     pub at: Vec<At>,
 }
 
+/// One cut entry: the values shared by every cut in its `at` list, plus the positions
+/// themselves. Which fields a kind actually uses varies (`Cut-Rabbet` has no position at all —
+/// "along an edge" — and `Cut-Slot`/`Cut-Notch` have no depth), so every field here is optional
+/// and the command layer enforces which ones a given kind requires; a field a kind does not use
+/// is left out, per "a property that is not used is left out."
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct CutEntry {
+    /// A face letter (`A`/`B`) or a named edge (as `woodedges` names them, e.g. `"Top"`).
+    #[serde(rename = "Face / Edge")]
+    pub face_edge: String,
+    #[serde(rename = "Length")]
+    pub length: f64,
+    #[serde(rename = "Width")]
+    pub width: f64,
+    #[serde(rename = "Depth", default, skip_serializing_if = "Option::is_none")]
+    pub depth: Option<f64>,
+    #[serde(rename = "Angle", default, skip_serializing_if = "Option::is_none")]
+    pub angle: Option<f64>,
+    /// Empty for `Cut-Rabbet` ("along an edge": no start position).
+    #[serde(rename = "At", default, skip_serializing_if = "Vec::is_empty")]
+    pub at: Vec<At>,
+}
+
 /// One part. The properties the first slice knows are fields; every other property is kept in
 /// `other` exactly as read, so a later version of the property list is never lost on save.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -126,6 +149,18 @@ pub struct Part {
     pub hole_shelf_pin: Vec<HoleEntry>,
     #[serde(rename = "Hole-Dowel", default, skip_serializing_if = "Vec::is_empty")]
     pub hole_dowel: Vec<HoleEntry>,
+    #[serde(rename = "Cut-Dado", default, skip_serializing_if = "Vec::is_empty")]
+    pub cut_dado: Vec<CutEntry>,
+    #[serde(rename = "Cut-Groove", default, skip_serializing_if = "Vec::is_empty")]
+    pub cut_groove: Vec<CutEntry>,
+    #[serde(rename = "Cut-Rabbet", default, skip_serializing_if = "Vec::is_empty")]
+    pub cut_rabbet: Vec<CutEntry>,
+    #[serde(rename = "Cut-Slot", default, skip_serializing_if = "Vec::is_empty")]
+    pub cut_slot: Vec<CutEntry>,
+    #[serde(rename = "Cut-Notch", default, skip_serializing_if = "Vec::is_empty")]
+    pub cut_notch: Vec<CutEntry>,
+    #[serde(rename = "Cut-Pocket", default, skip_serializing_if = "Vec::is_empty")]
+    pub cut_pocket: Vec<CutEntry>,
     #[serde(flatten)]
     pub other: BTreeMap<String, Value>,
 }
@@ -158,6 +193,12 @@ impl Part {
             hole_pocket_screw: Vec::new(),
             hole_shelf_pin: Vec::new(),
             hole_dowel: Vec::new(),
+            cut_dado: Vec::new(),
+            cut_groove: Vec::new(),
+            cut_rabbet: Vec::new(),
+            cut_slot: Vec::new(),
+            cut_notch: Vec::new(),
+            cut_pocket: Vec::new(),
             other: BTreeMap::new(),
         }
     }

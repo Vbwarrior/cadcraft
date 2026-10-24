@@ -48,6 +48,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Commands to add, delete and list a wood part's holes (Through, Blind, Counterbore,
   Countersink, Pocket-Screw, Shelf-Pin, Dowel), each drawn as a small marker. Holes with the
   same properties at different positions share one entry.
+- Commands to add, delete and list a wood part's cuts (Dado, Groove, Rabbet, Slot, Notch,
+  Pocket), each drawn as a small marker.
 
 ## [0.10.0] - 2026-10-23
 
