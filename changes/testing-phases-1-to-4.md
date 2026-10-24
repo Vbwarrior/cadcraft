@@ -1,11 +1,11 @@
-# Testing Phases 1-3 (so you can sign off on each merge)
+# Testing Phases 1-4 (so you can sign off on each merge)
 
 No buttons for any of this yet — Phase 12 builds those. For now you type each command by name
 at the command line, the same way you'd type `LINE` or `CIRCLE`. Lower case or upper case both
 work.
 
 For each phase below: do the steps, check the result looks right, then tell me either:
-- **"merge phase 1"** (or 2, or 3) to approve it, or
+- **"merge phase 1"** (or 2, 3, 4) to approve it, or
 - what looked wrong, and I'll fix it before asking again.
 
 You can test the phases in any order, or all in one sitting.
@@ -80,7 +80,43 @@ part's entry once nothing is left pointing at it.
 
 ---
 
+## Phase 4: settings, Common size presets and lists
+
+Eight commands, all global — they don't need a drawing open or anything selected, because
+they work on one settings file shared by every drawing (not something inside a drawing).
+
+1. Type `woodsettingsget`. You'll see the whole settings file printed: things like straightness
+   tolerance, units, the three build-size limits (all empty at first), 10 Common size presets
+   (lumber sizes 1x2 through 2x8), and six lists (Joint type, Edge profile, Glue type, Screw
+   type, Hardware type, End treatment).
+2. Type `woodsettingsset` and give it `units: mm`. Run `woodsettingsget` again — units should
+   now say `mm`, and nothing else should have changed.
+3. Try `woodsettingsset` with `units: cm` (not a real choice). **It should refuse**, saying units
+   must be `in` or `mm`.
+4. Type `woodsizeadd` and give it a name, width and thickness, for example `Scrap`, `2`, `0.5`.
+   Run `woodsettingsget` — you should see 11 presets now, with your new one at the end.
+5. Try `woodsizeadd` again with the exact same name, `Scrap`. **It should refuse** — you can't
+   have two presets with the same name.
+6. Type `woodsizerename` on `Scrap`, giving it a new name like `Offcut`. Then `woodsizedelete` on
+   `Offcut`. Check with `woodsettingsget` after each — the name changes, then it's gone, back
+   down to 10 presets.
+7. Type `woodlistadd` with `list: Glue type` and `entry: Hide glue`. Check `woodsettingsget` —
+   the Glue type list should now have 4 entries. Then `woodlistdelete` the same entry to remove
+   it again.
+
+**What to look for:** step 2 changes only `units`, nothing else. Step 3 refuses cleanly. Steps
+4-6 add, rename and delete a Common size preset correctly, refusing a duplicate name. Step 7
+does the same for a list entry.
+
+**One thing to know:** this is the first phase that doesn't touch a drawing file at all — it
+writes to one settings file on your computer, shared across every drawing you ever open. On
+Windows that's `%APPDATA%\WoodCraft\settings.json`. If you want to reset it back to just the
+defaults at any point, delete that file and it'll be recreated fresh the next time any wood
+settings command runs.
+
+---
+
 ## After testing
 
-Tell me which of Phase 1, 2, 3 are good to merge, and I'll merge those into `main` in order and
-let you know when it's done.
+Tell me which of Phase 1, 2, 3, 4 are good to merge, and I'll merge those into `main` in order
+and let you know when it's done.
