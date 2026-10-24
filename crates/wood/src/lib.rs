@@ -7,9 +7,13 @@
 
 pub mod data;
 pub mod guid;
+pub mod settings_data;
+pub mod settings_store;
 pub mod store;
 
 pub use data::{CommonSize, Part, WoodData};
+pub use settings_data::{BuildSizeLimits, CommonSizePreset, ListName, WoodLists, WoodSettings};
+pub use settings_store::SettingsError;
 pub use store::{KEY, WoodError};
 
 /// The wood file extension (the content is DXF).
