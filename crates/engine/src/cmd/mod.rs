@@ -46,8 +46,15 @@ mod utility;
 mod view;
 mod wood;
 mod wood_array;
+mod wood_cuts;
+mod wood_edgeprofile;
 mod wood_edges;
+mod wood_fasteners;
 mod wood_file;
+mod wood_hardware;
+mod wood_holes;
+mod wood_joints;
+mod wood_marks;
 mod wood_query;
 mod wood_settings;
 
@@ -214,8 +221,15 @@ pub fn command_specs() -> &'static [CommandSpec] {
         v.extend(lisp::specs());
         v.extend(wood::specs());
         v.extend(wood_array::specs());
+        v.extend(wood_cuts::specs());
+        v.extend(wood_edgeprofile::specs());
         v.extend(wood_edges::specs());
+        v.extend(wood_fasteners::specs());
         v.extend(wood_file::specs());
+        v.extend(wood_hardware::specs());
+        v.extend(wood_holes::specs());
+        v.extend(wood_joints::specs());
+        v.extend(wood_marks::specs());
         v.extend(wood_query::specs());
         v.extend(wood_settings::specs());
         v

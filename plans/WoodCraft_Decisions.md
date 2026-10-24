@@ -38,3 +38,13 @@ Every decision made so far, so Claude Code never asks twice. Claude Code adds a 
     — never a record of what was implemented or when. `changes/phase-N.md` and `CHANGELOG.md`
     are where implementation history goes; README only describes the current, user-facing state.
 
+19. **(Oct 24, 2026)** Phase 6 group 4 (joinery): `Joint type`'s `Joint code` field is NOT
+    validated against the "Joint type" list seeded in WoodCraft settings (Phase 4), while `End
+    treatment`'s `Profile` field IS validated against the "End treatment" list. This follows
+    `Wood_Workflow_Scope.md`'s own wording literally — it ties lists to "the chosen text" for
+    End treatment but doesn't say the same for Joint type's "Joint code," and the property
+    sheet's row for `Joint type` doesn't name the `Lists` tab the way `Edge profile`/`End
+    treatment` do. Took the simplest reading (validate only where a source actually says to)
+    rather than assuming symmetry. Flagged for Chris: if `Joint code` should also be restricted
+    to the "Joint type" settings list, say so and it'll be made consistent with `End treatment`.
+

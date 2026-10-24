@@ -43,6 +43,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   correctly, arcs staying arcs.
 - A WoodCraft section in the README listing every command built so far, with its parameters and
   what it does.
+- Commands to set and clear a wood part's orientation mark, and to add, delete and list its
+  reference marks, each drawn as a small marker in the part's own geometry.
+- Commands to add, delete and list a wood part's holes (Through, Blind, Counterbore,
+  Countersink, Pocket-Screw, Shelf-Pin, Dowel), each drawn as a small marker. Holes with the
+  same properties at different positions share one entry.
+- Commands to add, delete and list a wood part's cuts (Dado, Groove, Rabbet, Slot, Notch,
+  Pocket), each drawn as a small marker.
+- Commands for a wood part's joinery (Mortise, Tenon, Biscuit, each drawn as a small marker),
+  its Joint type, and its End treatments (checked against the WoodCraft settings list).
+- Commands for a wood part's Edge profile (checked against the WoodCraft settings list), Bevel
+  and Miter.
+- Commands for a wood part's Glue, Screw, Nail and Dowel fasteners, and its Hinge, Drawer slide
+  and Drawer Pull hardware (type checked against the WoodCraft settings lists), each drawn as a
+  small marker. This completes all six WoodCraft property groups.
 
 ## [0.10.0] - 2026-10-23
 

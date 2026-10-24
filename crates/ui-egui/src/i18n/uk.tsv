@@ -1384,3 +1384,41 @@
 	Rename List Entry	Перейменувати елемент списку
 	Delete List Entry	Видалити елемент списку
 	Wood Part Edges	Кромки деталі з дерева
+	Set Wood Part Orientation Mark	Встановити орієнтаційну позначку деталі
+	Clear Wood Part Orientation Mark	Очистити орієнтаційну позначку деталі
+	Add Wood Part Reference Mark	Додати довідкову позначку деталі
+	Delete Wood Part Reference Mark	Видалити довідкову позначку деталі
+	Wood Part Marks	Позначки деталі з дерева
+	Add Wood Part Hole	Додати отвір деталі
+	Delete Wood Part Hole	Видалити отвір деталі
+	Wood Part Holes	Отвори деталі з дерева
+	Add Wood Part Cut	Додати виріз деталі
+	Delete Wood Part Cut	Видалити виріз деталі
+	Wood Part Cuts	Вирізи деталі з дерева
+	Add Wood Part Joinery	Додати з'єднання деталі
+	Delete Wood Part Joinery	Видалити з'єднання деталі
+	Wood Part Joinery	З'єднання деталі з дерева
+	Set Wood Part Joint Type	Встановити тип з'єднання деталі
+	Clear Wood Part Joint Type	Очистити тип з'єднання деталі
+	Set Wood Part End Treatment	Встановити обробку торця деталі
+	Clear Wood Part End Treatment	Очистити обробку торця деталі
+	Wood Part Joint Info	Інформація про з'єднання деталі
+	Set Wood Part Edge Profile	Встановити профіль кромки деталі
+	Clear Wood Part Edge Profile	Очистити профіль кромки деталі
+	Set Wood Part Bevel	Встановити фаску деталі
+	Clear Wood Part Bevel	Очистити фаску деталі
+	Set Wood Part Miter	Встановити зрізання під кутом деталі
+	Clear Wood Part Miter	Очистити зрізання під кутом деталі
+	Wood Part Edge Properties	Властивості кромки деталі
+	Set Wood Part Glue	Встановити клей деталі
+	Clear Wood Part Glue	Очистити клей деталі
+	Add Wood Part Screw	Додати шуруп деталі
+	Delete Wood Part Screw	Видалити шуруп деталі
+	Add Wood Part Nail	Додати цвях деталі
+	Delete Wood Part Nail	Видалити цвях деталі
+	Add Wood Part Dowel Fastener	Додати кріпильний шкант деталі
+	Delete Wood Part Dowel Fastener	Видалити кріпильний шкант деталі
+	Wood Part Fasteners	Кріплення деталі з дерева
+	Add Wood Part Hardware	Додати фурнітуру деталі
+	Delete Wood Part Hardware	Видалити фурнітуру деталі
+	Wood Part Hardware	Фурнітура деталі з дерева

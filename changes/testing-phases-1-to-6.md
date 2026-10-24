@@ -1,12 +1,15 @@
-# Testing Phases 1-5 (so you can sign off on each merge)
+# Testing Phases 1-6 (so you can sign off on each merge)
 
 No buttons for any of this yet — Phase 12 builds those. For now you type each command by name
 at the command line, the same way you'd type `LINE` or `CIRCLE`. Lower case or upper case both
 work.
 
 For each phase below: do the steps, check the result looks right, then tell me either:
-- **"merge phase 1"** (or 2, 3, 4, 5) to approve it, or
+- **"merge phase 1"** (or 2, 3, 4, 5, 6) to approve it, or
 - what looked wrong, and I'll fix it before asking again.
+
+**Phase 6 note:** this phase is large (six separate groups of part properties — marks, holes,
+cuts, joints, edge profiles, fasteners and hardware). All six groups are now built and tested.
 
 You can test the phases in any order, or all in one sitting.
 
@@ -146,7 +149,142 @@ back to the default.
 
 ---
 
+## Phase 6, group 1: orientation mark and reference marks
+
+Five commands: `woodorientationmark`, `woodorientationmarkclear`, `woodreferencemarkadd`,
+`woodreferencemarkdelete`, `woodmarks`.
+
+1. Draw a rectangle, make it a wood part (same as before).
+2. Select the part and type `woodorientationmark`. It will ask for a face (`A` or `B`), an edge
+   name (type something like `Top`), and a point to place it. Pick a point right above the top
+   edge.
+3. Zoom to extents. You should see a small **V** shape sitting just above that edge, its point
+   touching it.
+4. Type `woodmarks` on the same part. You should see the orientation mark's face and edge
+   printed back.
+5. Run `woodorientationmark` again with a different face/edge/point. The old V should disappear
+   and only the new one shows — there should never be two.
+6. Type `woodorientationmarkclear`. The V should vanish, and `woodmarks` should show no
+   orientation mark again.
+7. Type `woodreferencemarkadd`, giving it a face, a point, and a label like `Datum`. A small
+   cross should appear at that point (it's small — you may need to zoom in close to see it).
+8. Type `woodmarks` again — you should see your reference mark listed with its label.
+9. Type `woodreferencemarkdelete` with that same label. It should disappear from both the
+   drawing and `woodmarks`.
+
+**What to look for:** the V always touches the edge you placed it near. Step 5 never leaves two
+V's behind. Step 6 actually removes the drawing from view, not just the data. A copy
+(`woodcopy`) of a part with reference marks carries them along too, if you want to try that.
+
+---
+
+## Phase 6, group 2: holes
+
+Three commands: `woodholeadd`, `woodholedelete`, `woodholes`.
+
+1. Using the part from above, select it and type `woodholeadd`. It asks for a kind (type
+   `Hole-Through`), a face, a point, and a diameter.
+2. Zoom to extents. You should see a small **X** mark where you placed it.
+3. Add a second through hole with the same diameter and face, at a different point.
+4. Type `woodholes`. You should see one `Hole-Through` entry listing **both** points together —
+   not two separate entries. That's expected: holes that are otherwise identical share one entry.
+5. Now add a third hole of a different diameter. Run `woodholes` again — this one should show up
+   as its own separate entry, since it isn't identical to the first two.
+6. Type `woodholedelete` and give it one of the two matching points from step 3. `woodholes`
+   should now show that entry with only the one remaining point.
+
+**What to look for:** step 4 never doubles up identical holes — one entry, two points. Step 5
+creates a new entry instead of merging. Step 6's delete only removes the one point you named.
+
+---
+
+## Phase 6, group 3: cuts
+
+Three commands: `woodcutadd`, `woodcutdelete`, `woodcuts`.
+
+1. Select the part and type `woodcutadd`. Give it kind `Cut-Dado`, a face/edge (type `A`), a
+   point, a length, a width, and a depth.
+2. Zoom to extents. You should see a small square where you placed it.
+3. Type `woodcuts`. You should see your dado listed with the values you gave it.
+4. Try adding a `Cut-Slot` without an angle — it should refuse, since a slot needs one.
+5. Try adding a `Cut-Rabbet` **with** a point — it should refuse, since a rabbet runs along a
+   whole edge and doesn't take a position. Add it again without a point; that should work.
+6. Type `woodcutdelete` with kind `Cut-Rabbet` and no point — it should remove that whole entry
+   in one go, since a rabbet has nothing to pick a position from.
+
+**What to look for:** each cut kind asks for only the fields that make sense for it, and
+refuses when you give it one it doesn't use or leave out one it needs. A rabbet never asks for
+a position.
+
+---
+
+## Phase 6, group 4: joinery, joint type and end treatments
+
+Eight commands: `woodjoineryadd`, `woodjoinerydelete`, `woodjoinery`, `woodjointtypeset`,
+`woodjointtypeclear`, `woodendtreatmentset`, `woodendtreatmentclear`, `woodjointinfo`.
+
+1. Select the part and type `woodjoineryadd`. Give it kind `Mortise`, a face/edge, a point,
+   length, width, and depth. Zoom to extents — you should see a small triangle mark.
+2. Type `woodjoinery` — you should see your mortise listed.
+3. Type `woodjointtypeset` and give it a joint code (like `Tenon`) and a mating part ID (any
+   text — it's meant to be another part's identifier). Type `woodjointinfo` — you should see it
+   listed.
+4. Type `woodendtreatmentset` with an edge/end (like `End A`) and a profile. Try a made-up
+   profile name first — it should refuse, since the profile has to be one from the End
+   treatment list (the same list from Phase 4's settings). Then try a real one, like `Tenon`.
+5. Type `woodjointinfo` again — you should see your end treatment listed alongside the joint
+   type.
+6. Set another end treatment for the same `End A` with a different profile — it should replace
+   the old one, not add a second.
+
+**What to look for:** step 4 correctly refuses a profile that isn't in the settings list. Step
+6 replaces rather than duplicates. The joint type always shows just one entry, however many
+times you set it.
+
+---
+
+## Phase 6, group 5: edge profile, bevel and miter
+
+Seven commands: `woodedgeprofileset`, `woodedgeprofileclear`, `woodbevelset`, `woodbevelclear`,
+`woodmiterset`, `woodmiterclear`, `woodedgeinfo`.
+
+1. Select the part and type `woodedgeprofileset`. Give it an edge/end (type `Top`), a profile
+   (type `Round-over` — one of the names from the Edge profile list in settings), and a size.
+2. Type `woodedgeinfo` — you should see it listed.
+3. Try the same command again with a made-up profile name — it should refuse.
+4. Type `woodbevelset` with an edge/end and an angle (in degrees). Type `woodmiterset` the same
+   way on a different edge/end. Type `woodedgeinfo` again — you should see all three listed
+   together.
+
+**What to look for:** an unrecognized profile name is always refused. Bevel and Miter are
+independent of each other and of Edge profile — setting one doesn't touch the others.
+
+---
+
+## Phase 6, group 6: fasteners and hardware
+
+Twelve commands: `woodglueset`, `woodglueclear`, `woodscrewadd`, `woodscrewdelete`,
+`woodnailadd`, `woodnaildelete`, `wooddowelfastenadd`, `wooddowelfastendelete`,
+`woodfasteners`, `woodhardwareadd`, `woodhardwaredelete`, `woodhardware`.
+
+1. Select the part and type `woodglueset` with a face/edge and a glue type (type `Wood glue`).
+2. Type `woodscrewadd` with a face/edge, a screw type (`Phillips` or `Flat head`), a point and a
+   size. Zoom to extents — a small plus-shaped mark should appear.
+3. Type `woodnailadd` with a face/edge, a point, a diameter and a length (no type — nails don't
+   have one).
+4. Type `woodfasteners` — you should see your glue, screw and nail all listed.
+5. Type `woodhardwareadd` with kind `Hinge`, a face, a type (`Hinge`), and a point. A different
+   small mark should appear.
+6. Try adding a `Drawer slide` without a size — it should refuse, since a drawer slide needs
+   one. A `Hinge` with a size should also refuse, since hinges are location-only.
+7. Type `woodhardware` — you should see your hinge listed.
+
+**What to look for:** nails never ask for or show a type. Step 6 correctly enforces size only
+where it belongs. Everything you added shows up correctly in `woodfasteners`/`woodhardware`.
+
+---
+
 ## After testing
 
-Tell me which of Phase 1, 2, 3, 4, 5 are good to merge, and I'll merge those into `main` in
-order and let you know when it's done.
+Tell me which of Phase 1 through 6 are good to merge, and I'll merge those into `main` in order
+and let you know when it's done. Phase 6 is now complete (all six property groups).
