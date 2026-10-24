@@ -60,6 +60,40 @@ pub struct ReferenceMark {
     pub label: String,
 }
 
+/// One position in a hole or mark entry's `At` list: `WoodCraft_Part_JSON_Draft.md`'s "same
+/// shape, many places" rule — entries that differ only by position share one entry, with an
+/// `At` list of positions, instead of repeating the shared values.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct At {
+    #[serde(rename = "X")]
+    pub x: f64,
+    #[serde(rename = "Y")]
+    pub y: f64,
+}
+
+/// One hole entry: the values shared by every hole in its `at` list (face, diameter, and the
+/// kind-specific extra fields the sheet names), plus the positions themselves. A kind that has
+/// no depth (`Hole-Through`) or no extras leaves those fields out, per "a property that is not
+/// used is left out."
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct HoleEntry {
+    #[serde(rename = "Face")]
+    pub face: Face,
+    #[serde(rename = "Dia")]
+    pub dia: f64,
+    #[serde(rename = "Depth", default, skip_serializing_if = "Option::is_none")]
+    pub depth: Option<f64>,
+    /// `Hole-Counterbore`: bore diameter. `Hole-Countersink`: sink diameter.
+    /// `Hole-Pocket-Screw`: drill angle (degrees).
+    #[serde(rename = "Extra 1", default, skip_serializing_if = "Option::is_none")]
+    pub extra1: Option<f64>,
+    /// `Hole-Counterbore`: bore depth. `Hole-Countersink`: angle (degrees).
+    #[serde(rename = "Extra 2", default, skip_serializing_if = "Option::is_none")]
+    pub extra2: Option<f64>,
+    #[serde(rename = "At")]
+    pub at: Vec<At>,
+}
+
 /// One part. The properties the first slice knows are fields; every other property is kept in
 /// `other` exactly as read, so a later version of the property list is never lost on save.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -78,6 +112,20 @@ pub struct Part {
     pub orientation_mark: Option<OrientationMark>,
     #[serde(rename = "Reference mark", default, skip_serializing_if = "Vec::is_empty")]
     pub reference_marks: Vec<ReferenceMark>,
+    #[serde(rename = "Hole-Through", default, skip_serializing_if = "Vec::is_empty")]
+    pub hole_through: Vec<HoleEntry>,
+    #[serde(rename = "Hole-Blind", default, skip_serializing_if = "Vec::is_empty")]
+    pub hole_blind: Vec<HoleEntry>,
+    #[serde(rename = "Hole-Counterbore", default, skip_serializing_if = "Vec::is_empty")]
+    pub hole_counterbore: Vec<HoleEntry>,
+    #[serde(rename = "Hole-Countersink", default, skip_serializing_if = "Vec::is_empty")]
+    pub hole_countersink: Vec<HoleEntry>,
+    #[serde(rename = "Hole-Pocket-Screw", default, skip_serializing_if = "Vec::is_empty")]
+    pub hole_pocket_screw: Vec<HoleEntry>,
+    #[serde(rename = "Hole-Shelf-Pin", default, skip_serializing_if = "Vec::is_empty")]
+    pub hole_shelf_pin: Vec<HoleEntry>,
+    #[serde(rename = "Hole-Dowel", default, skip_serializing_if = "Vec::is_empty")]
+    pub hole_dowel: Vec<HoleEntry>,
     #[serde(flatten)]
     pub other: BTreeMap<String, Value>,
 }
@@ -103,6 +151,13 @@ impl Part {
             common_size: None,
             orientation_mark: None,
             reference_marks: Vec::new(),
+            hole_through: Vec::new(),
+            hole_blind: Vec::new(),
+            hole_counterbore: Vec::new(),
+            hole_countersink: Vec::new(),
+            hole_pocket_screw: Vec::new(),
+            hole_shelf_pin: Vec::new(),
+            hole_dowel: Vec::new(),
             other: BTreeMap::new(),
         }
     }

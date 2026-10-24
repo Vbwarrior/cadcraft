@@ -2,8 +2,8 @@
 
 use cadcraft_engine::doc::Drawing;
 use cadcraft_io::{read_dxf, write_dxf};
+use cadcraft_wood::data::{At, Face, HoleEntry};
 use cadcraft_wood::{CommonSize, Part, WoodData, store};
-use serde_json::json;
 
 fn sample() -> WoodData {
     let mut data = WoodData::default();
@@ -11,8 +11,8 @@ fn sample() -> WoodData {
     leg.grain_direction = Some(90.0);
     leg.common_size = Some(CommonSize { preset_name: "2x4".into(), width: 3.5, thickness: 1.5 });
     // Many entries, so the JSON is far longer than one DXF group.
-    let at: Vec<_> = (0..80).map(|i| json!({ "X": 1.5, "Y": i as f64 * 0.25 })).collect();
-    leg.other.insert("Hole-Through".into(), json!([{ "Face": "A", "Dia": 0.25, "At": at }]));
+    let at: Vec<At> = (0..80).map(|i| At { x: 1.5, y: i as f64 * 0.25 }).collect();
+    leg.hole_through = vec![HoleEntry { face: Face::A, dia: 0.25, depth: None, extra1: None, extra2: None, at }];
     data.parts.insert("3f2a9c10-0000-4000-8000-000000000001".into(), leg);
     data
 }

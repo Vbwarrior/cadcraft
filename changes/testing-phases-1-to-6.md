@@ -180,6 +180,26 @@ V's behind. Step 6 actually removes the drawing from view, not just the data. A 
 
 ---
 
+## Phase 6, group 2: holes
+
+Three commands: `woodholeadd`, `woodholedelete`, `woodholes`.
+
+1. Using the part from above, select it and type `woodholeadd`. It asks for a kind (type
+   `Hole-Through`), a face, a point, and a diameter.
+2. Zoom to extents. You should see a small **X** mark where you placed it.
+3. Add a second through hole with the same diameter and face, at a different point.
+4. Type `woodholes`. You should see one `Hole-Through` entry listing **both** points together —
+   not two separate entries. That's expected: holes that are otherwise identical share one entry.
+5. Now add a third hole of a different diameter. Run `woodholes` again — this one should show up
+   as its own separate entry, since it isn't identical to the first two.
+6. Type `woodholedelete` and give it one of the two matching points from step 3. `woodholes`
+   should now show that entry with only the one remaining point.
+
+**What to look for:** step 4 never doubles up identical holes — one entry, two points. Step 5
+creates a new entry instead of merging. Step 6's delete only removes the one point you named.
+
+---
+
 ## After testing
 
 Tell me which of Phase 1, 2, 3, 4, 5, 6 (or a part of 6, since it's being built in groups) are

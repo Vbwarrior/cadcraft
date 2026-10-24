@@ -48,6 +48,7 @@ mod wood;
 mod wood_array;
 mod wood_edges;
 mod wood_file;
+mod wood_holes;
 mod wood_marks;
 mod wood_query;
 mod wood_settings;
@@ -217,6 +218,7 @@ pub fn command_specs() -> &'static [CommandSpec] {
         v.extend(wood_array::specs());
         v.extend(wood_edges::specs());
         v.extend(wood_file::specs());
+        v.extend(wood_holes::specs());
         v.extend(wood_marks::specs());
         v.extend(wood_query::specs());
         v.extend(wood_settings::specs());
