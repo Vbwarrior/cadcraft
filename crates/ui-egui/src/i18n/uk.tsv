@@ -1384,3 +1384,8 @@
 	Rename List Entry	Перейменувати елемент списку
 	Delete List Entry	Видалити елемент списку
 	Wood Part Edges	Кромки деталі з дерева
+	Set Wood Part Orientation Mark	Встановити орієнтаційну позначку деталі
+	Clear Wood Part Orientation Mark	Очистити орієнтаційну позначку деталі
+	Add Wood Part Reference Mark	Додати довідкову позначку деталі
+	Delete Wood Part Reference Mark	Видалити довідкову позначку деталі
+	Wood Part Marks	Позначки деталі з дерева

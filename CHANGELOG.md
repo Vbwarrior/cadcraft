@@ -43,6 +43,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   correctly, arcs staying arcs.
 - A WoodCraft section in the README listing every command built so far, with its parameters and
   what it does.
+- Commands to set and clear a wood part's orientation mark, and to add, delete and list its
+  reference marks, each drawn as a small marker in the part's own geometry.
 
 ## [0.10.0] - 2026-10-23
 

@@ -1,12 +1,17 @@
-# Testing Phases 1-5 (so you can sign off on each merge)
+# Testing Phases 1-6 (so you can sign off on each merge)
 
 No buttons for any of this yet — Phase 12 builds those. For now you type each command by name
 at the command line, the same way you'd type `LINE` or `CIRCLE`. Lower case or upper case both
 work.
 
 For each phase below: do the steps, check the result looks right, then tell me either:
-- **"merge phase 1"** (or 2, 3, 4, 5) to approve it, or
+- **"merge phase 1"** (or 2, 3, 4, 5, 6) to approve it, or
 - what looked wrong, and I'll fix it before asking again.
+
+**Phase 6 note:** this phase is large (six separate groups of part properties — marks, holes,
+cuts, joints, edge profiles, fasteners). It's being built and tested one group at a time, each
+on this same branch. This guide gets a new section added as each group is finished, so you don't
+have to wait for all six before trying the ones that are ready.
 
 You can test the phases in any order, or all in one sitting.
 
@@ -146,7 +151,36 @@ back to the default.
 
 ---
 
+## Phase 6, group 1: orientation mark and reference marks
+
+Five commands: `woodorientationmark`, `woodorientationmarkclear`, `woodreferencemarkadd`,
+`woodreferencemarkdelete`, `woodmarks`.
+
+1. Draw a rectangle, make it a wood part (same as before).
+2. Select the part and type `woodorientationmark`. It will ask for a face (`A` or `B`), an edge
+   name (type something like `Top`), and a point to place it. Pick a point right above the top
+   edge.
+3. Zoom to extents. You should see a small **V** shape sitting just above that edge, its point
+   touching it.
+4. Type `woodmarks` on the same part. You should see the orientation mark's face and edge
+   printed back.
+5. Run `woodorientationmark` again with a different face/edge/point. The old V should disappear
+   and only the new one shows — there should never be two.
+6. Type `woodorientationmarkclear`. The V should vanish, and `woodmarks` should show no
+   orientation mark again.
+7. Type `woodreferencemarkadd`, giving it a face, a point, and a label like `Datum`. A small
+   cross should appear at that point (it's small — you may need to zoom in close to see it).
+8. Type `woodmarks` again — you should see your reference mark listed with its label.
+9. Type `woodreferencemarkdelete` with that same label. It should disappear from both the
+   drawing and `woodmarks`.
+
+**What to look for:** the V always touches the edge you placed it near. Step 5 never leaves two
+V's behind. Step 6 actually removes the drawing from view, not just the data. A copy
+(`woodcopy`) of a part with reference marks carries them along too, if you want to try that.
+
+---
+
 ## After testing
 
-Tell me which of Phase 1, 2, 3, 4, 5 are good to merge, and I'll merge those into `main` in
-order and let you know when it's done.
+Tell me which of Phase 1, 2, 3, 4, 5, 6 (or a part of 6, since it's being built in groups) are
+good to merge, and I'll merge those into `main` in order and let you know when it's done.
