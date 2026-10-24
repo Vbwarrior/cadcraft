@@ -33,5 +33,8 @@ Every decision made so far, so Claude Code never asks twice. Claude Code adds a 
     global Changelog Rules, with a backfilled Phase 0 entry (`chore/changelog-setup` branch, not
     yet merged). README updates: skipped for Phase 0 (no user-facing change yet — no UI exists
     before Phase 12), but required starting Phase 1 onward wherever usage (CLI/JSON commands)
-    changes, in the same commit as the change, per the global rule.
+    changes, in the same commit as the change, per the global rule. **Clarified same day by
+    Chris:** README content is application overview, usage, setup and configuration for the user
+    — never a record of what was implemented or when. `changes/phase-N.md` and `CHANGELOG.md`
+    are where implementation history goes; README only describes the current, user-facing state.
 

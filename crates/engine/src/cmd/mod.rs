@@ -45,6 +45,7 @@ pub use txt2mtxt::Txt2MtxtOptions;
 mod utility;
 mod view;
 mod wood;
+mod wood_file;
 
 pub mod curves;
 pub mod helpers;
@@ -208,6 +209,7 @@ pub fn command_specs() -> &'static [CommandSpec] {
         v.extend(constraints::specs());
         v.extend(lisp::specs());
         v.extend(wood::specs());
+        v.extend(wood_file::specs());
         v
     })
 }

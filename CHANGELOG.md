@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   geometry.
 - A `woodpart` command that creates a wood part's geometry and its property data together, as one
   undoable step.
+- WoodCraft project files: new, open and save commands for `.wood` project files, kept separate
+  from the standard 2D file commands. Opening anything other than a `.wood` file as a WoodCraft
+  project is refused with a clear message.
 - WoodCraft plan documents under `plans/`, and a `changes/` folder recording what each WoodCraft
   phase adds.
 
