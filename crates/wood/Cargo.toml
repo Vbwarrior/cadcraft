@@ -1,0 +1,15 @@
+[package]
+name = "cadcraft-wood"
+description = "WoodCraft part data: the part properties JSON kept in the drawing's WOODCRAFT_PARTS XRECORD"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+cadcraft-doc = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }

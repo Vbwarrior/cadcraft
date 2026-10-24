@@ -1,0 +1,16 @@
+//! WoodCraft part data. Pure data and storage: no commands and no UI.
+//!
+//! The part properties live as JSON in an XRECORD under the key `WOODCRAFT_PARTS` of the
+//! drawing's named object dictionary. [`store`] reads and writes that XRECORD through the
+//! drawing's `foreign` data, so undo, redo, copy-on-write and Save carry it with the geometry.
+#![deny(clippy::unwrap_used, clippy::expect_used, clippy::panic, clippy::unimplemented, clippy::todo, clippy::unreachable)]
+
+pub mod data;
+pub mod guid;
+pub mod store;
+
+pub use data::{CommonSize, Part, WoodData};
+pub use store::{KEY, WoodError};
+
+/// The wood file extension (the content is DXF).
+pub const EXTENSION: &str = "wood";
