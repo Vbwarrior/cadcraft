@@ -18,6 +18,9 @@ pub const KEY: &str = "WOODCRAFT_PARTS";
 const NOD_HANDLE: Handle = Handle(0xC);
 /// A DXF string value is kept to this many characters per group, as CADCraft's own XRECORDs.
 const CHUNK: usize = 250;
+/// The most the part data's JSON may weigh (bytes, before escaping). A document over this is
+/// refused rather than written.
+pub const MAX_BYTES: usize = 8 * 1024 * 1024;
 
 #[derive(Debug, thiserror::Error)]
 pub enum WoodError {
@@ -25,6 +28,8 @@ pub enum WoodError {
     Json(#[from] serde_json::Error),
     #[error("the dictionary names the WoodCraft data but the object is missing")]
     MissingObject,
+    #[error("the WoodCraft part data is {0} bytes, over the {MAX_BYTES} byte limit")]
+    TooLarge(usize),
 }
 
 /// The part data of the drawing; an empty document when the drawing has none yet.
@@ -38,9 +43,21 @@ pub fn get(d: &Drawing) -> Result<WoodData, WoodError> {
     Ok(serde_json::from_str(&text)?)
 }
 
-/// Replace the part data of the drawing.
+/// What the user should see for `block`: a wood part's display name if `block` names one,
+/// otherwise `block` itself unchanged (so the GUID is never shown). Errors (e.g. corrupt part
+/// data) also fall back to the block name, since a display label must never fail.
+pub fn display_name(d: &Drawing, block: &str) -> String {
+    get(d).ok().and_then(|w| w.parts.get(block).map(|p| p.name.clone())).unwrap_or_else(|| block.to_string())
+}
+
+/// Replace the part data of the drawing. Refuses, without changing anything, data whose JSON
+/// would be over [`MAX_BYTES`].
 pub fn put(d: &mut Drawing, data: &WoodData) -> Result<(), WoodError> {
-    let text = ascii_json(&serde_json::to_string(data)?);
+    let json = serde_json::to_string(data)?;
+    if json.len() > MAX_BYTES {
+        return Err(WoodError::TooLarge(json.len()));
+    }
+    let text = ascii_json(&json);
     let chunks: Vec<RawTag> = split(&text).into_iter().map(|c| RawTag { code: 1, value: c.to_string() }).collect();
 
     // The object already there keeps its own groups (handle, owner, subclass); only the text goes.
@@ -161,5 +178,21 @@ mod tests {
         assert!(j.is_ascii());
         let v: serde_json::Value = serde_json::from_str(&j).unwrap();
         assert_eq!(v["name"], "Tête 🪵");
+    }
+
+    #[test]
+    fn oversized_part_data_is_refused_and_nothing_is_written() {
+        use crate::data::Part;
+
+        let mut d = Drawing::new_imperial();
+        let mut data = WoodData::default();
+        let mut big = Part::new("Big", 1.0);
+        // A single `other` entry well over MAX_BYTES once serialized.
+        big.other.insert("Filler".into(), serde_json::Value::String("x".repeat(MAX_BYTES + 1024)));
+        data.parts.insert("3f2a9c10-0000-4000-8000-000000000099".into(), big);
+
+        let err = put(&mut d, &data).unwrap_err();
+        assert!(matches!(err, WoodError::TooLarge(_)), "expected TooLarge, got {err:?}");
+        assert!(get(&d).unwrap().parts.is_empty(), "nothing was written to the drawing");
     }
 }

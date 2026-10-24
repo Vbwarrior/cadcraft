@@ -46,6 +46,7 @@ mod utility;
 mod view;
 mod wood;
 mod wood_file;
+mod wood_query;
 
 pub mod curves;
 pub mod helpers;
@@ -210,6 +211,7 @@ pub fn command_specs() -> &'static [CommandSpec] {
         v.extend(lisp::specs());
         v.extend(wood::specs());
         v.extend(wood_file::specs());
+        v.extend(wood_query::specs());
         v
     })
 }
