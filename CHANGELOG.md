@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - WoodCraft project files: new, open and save commands for `.wood` project files, kept separate
   from the standard 2D file commands. Opening anything other than a `.wood` file as a WoodCraft
   project is refused with a clear message.
+- Commands to list a drawing's wood parts, read one part's full properties, and look up a part's
+  display name from its underlying block name. A part's display name is always shown in place of
+  its internal identifier.
+- Commands to change a wood part's Thickness, Grain direction and display name, each undoable on
+  its own.
+- A size limit on a drawing's stored wood part data, refused with a clear error rather than
+  allowed to grow without bound.
 - WoodCraft plan documents under `plans/`, and a `changes/` folder recording what each WoodCraft
   phase adds.
 
