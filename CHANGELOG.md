@@ -24,6 +24,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   its own.
 - A size limit on a drawing's stored wood part data, refused with a clear error rather than
   allowed to grow without bound.
+- Commands to copy a wood part (as an independent new part), to place another shared instance of
+  one, to delete instances (cleaning up a part's data once its last instance is gone), and to
+  split shared instances back into independent parts, one at a time or all at once. Changing a
+  part shared by more than one instance is refused until it is split.
 - WoodCraft plan documents under `plans/`, and a `changes/` folder recording what each WoodCraft
   phase adds.
 
