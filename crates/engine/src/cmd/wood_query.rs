@@ -24,15 +24,18 @@ pub fn specs() -> Vec<CommandSpec> {
     ]
 }
 
-/// The one selected or named Insert's block name (the GUID), and an error naming the problem
-/// otherwise (nothing selected, more than one, or not a wood part).
-fn one_part_guid(s: &mut Session, cmd: &str, p: &Value) -> Result<String> {
-    let hs = targets(s, p)?;
-    if hs.len() != 1 {
-        return Err(bad(cmd, "select exactly one wood part"));
-    }
-    let doc = s.doc()?;
-    let block = match doc.entity(hs[0]).map(|e| &e.kind) {
+/// Every Insert in model space referencing block `guid`. Wood parts are only ever placed in
+/// model space (by `woodpart`/the Phase 3 array commands), never nested in another block or on a
+/// layout, so this is the complete set of "the array" for a GUID — there is no separate array
+/// object; it is counted by scanning, same as [`Wood_Workflow_Scope.md`]'s "Instances" rule says.
+pub(super) fn instances_of(d: &cadcraft_doc::Drawing, guid: &str) -> Vec<Handle> {
+    d.model.iter().filter(|e| matches!(&e.kind, EntityKind::Insert(ins) if ins.block.eq_ignore_ascii_case(guid))).map(|e| e.handle).collect()
+}
+
+/// The GUID of the wood part `h` is an instance of, or an error naming the problem (not a block
+/// reference, or not a wood part).
+pub(super) fn part_guid_of(doc: &cadcraft_doc::Drawing, cmd: &str, h: Handle) -> Result<String> {
+    let block = match doc.entity(h).map(|e| &e.kind) {
         Some(EntityKind::Insert(ins)) => ins.block.clone(),
         _ => return Err(bad(cmd, "the selected object is not a block reference")),
     };
@@ -41,6 +44,23 @@ fn one_part_guid(s: &mut Session, cmd: &str, p: &Value) -> Result<String> {
     } else {
         Err(bad(cmd, "the selected block is not a WoodCraft part"))
     }
+}
+
+/// The one selected or named Insert's block name (the GUID), and an error naming the problem
+/// otherwise (nothing selected, more than one, not a wood part, or — since this is used by the
+/// commands that change a part's shared properties — more than one instance of it: editing a
+/// shared part is refused; Split Array first).
+fn one_part_guid(s: &mut Session, cmd: &str, p: &Value) -> Result<String> {
+    let hs = targets(s, p)?;
+    if hs.len() != 1 {
+        return Err(bad(cmd, "select exactly one wood part"));
+    }
+    let doc = s.doc()?;
+    let guid = part_guid_of(doc, cmd, hs[0])?;
+    if instances_of(doc, &guid).len() > 1 {
+        return Err(bad(cmd, "this part has more than one instance; run Split Array first"));
+    }
+    Ok(guid)
 }
 
 /// The summary of one part used by LIST WOOD PARTS.

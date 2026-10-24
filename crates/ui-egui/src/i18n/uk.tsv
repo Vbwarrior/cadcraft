@@ -1369,3 +1369,9 @@
 	Set Part Thickness	Встановити товщину деталі
 	Set Part Grain Direction	Встановити напрямок волокон
 	Rename Wood Part	Перейменувати деталь з дерева
+	Copy Wood Part	Копіювати деталь з дерева
+	Copy Wood Part Array	Копіювати масив деталей з дерева
+	Delete Wood Part	Видалити деталь з дерева
+	Split Wood Part Array	Розділити масив деталей з дерева
+	Remove From Wood Part Array	Вилучити з масиву деталей з дерева
+	Explode Wood Part Array	Розбити масив деталей з дерева
