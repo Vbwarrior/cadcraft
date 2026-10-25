@@ -58,3 +58,16 @@ Every decision made so far, so Claude Code never asks twice. Claude Code adds a 
     gives it no `Tolerance`). `JointTypeEntry`'s own `tolerance` field is not used by this
     check. Flagged for Chris: if the real rule differs, say so and the check will be corrected.
 
+21. **(Oct 24, 2026)** Phase 8 (Export): the generated SCAD's geometry is literal and
+    axis-aligned, not a router-profile model. Holes become straight cylinders (drilled from the
+    stated `Face`, full thickness for `Hole-Through`, else the hole's own `Depth`); cuts become
+    axis-aligned boxes at their `At` position and `Length`/`Width`/`Depth` (a `Cut-Rabbet`, which
+    has no position, cuts once at the origin — WP repositions it against the named edge on
+    import). Nothing carves the actual shape of `Edge profile` (round-over, chamfer curvature,
+    and so on), `Bevel` or `Miter` into the model; those stay properties for WP/MM to read, per
+    the scope doc's own split between WoodCraft (properties) and WP/MM (3D work). Took the
+    simplest reading consistent with `Wood_Workflow_Scope.md` §5's own wording ("subtracts each
+    hole and cut, so a rendered part has real holes") rather than inventing profile geometry no
+    document asks for. Flagged for Chris: if the SCAD should carve real router-profile shapes
+    instead of staying flat, that's a scope change, not a bug, and the geometry will be redone.
+
