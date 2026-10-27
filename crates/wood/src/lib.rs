@@ -7,6 +7,7 @@
 
 pub mod data;
 pub mod edges;
+pub mod export;
 pub mod guid;
 pub mod settings_data;
 pub mod settings_store;
@@ -15,6 +16,7 @@ pub mod warnings;
 
 pub use data::{CommonSize, Part, WoodData};
 pub use edges::{Edge, EdgeError, Side};
+pub use export::{Outline, OutlinePoint, ProjectDocument, ProjectInfo, part_entry, scad_for_part};
 pub use settings_data::{BuildSizeLimits, CommonSizePreset, ListName, WoodLists, WoodSettings};
 pub use settings_store::SettingsError;
 pub use store::{KEY, WoodError};
