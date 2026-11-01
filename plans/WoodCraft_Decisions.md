@@ -71,3 +71,17 @@ Every decision made so far, so Claude Code never asks twice. Claude Code adds a 
     document asks for. Flagged for Chris: if the SCAD should carve real router-profile shapes
     instead of staying flat, that's a scope change, not a bug, and the geometry will be redone.
 
+22. **(Oct 28, 2026)** Phase 9 (history/git): reading `gitTimerMinutes` from the WoodCraft
+    settings file into the running app is left for Phase 12, not done now. The engine side is
+    fully wired (a setter, `history::set_git_timer_minutes`, and a tested default matching the
+    settings file's own default of 1.0 minute) — only the "load settings into the UI" step is
+    deferred, because `crates/ui-egui` has no dependency on `cadcraft-wood` yet and adding one,
+    plus a settings dialog to edit the value, is explicitly Phase 12 work per the implementation
+    plan and the "back end first, UI last" rule. Flagged for Chris: if the settings read should
+    happen sooner, say so and it will be moved up.
+
+23. **(Oct 28, 2026)** Also noticed and fixed while on Phase 9: Phase 8's commit never touched
+    `CHANGELOG.md`, leaving its `[Unreleased]` entry missing. Backfilled it in the Phase 9
+    commit (per the global Changelog Rules' "do not skip entries for small fixes") rather than
+    leaving the gap. Nothing else in the changelog was reordered or reworded.
+
