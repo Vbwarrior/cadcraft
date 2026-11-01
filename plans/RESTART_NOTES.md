@@ -117,16 +117,13 @@ exit, local-only commits never pushed, tests with a fake clock).
    if he'd rather wire the settings read now instead of in Phase 12.
 3. **`changes/phase-9.md` already written** (this checkpoint) — no further action needed unless
    the CI run above surfaces something that changes the facts it describes.
-4. **Not committed yet.** Once `cargo xtask ci` (see item 1) passes, stage and commit on
-   `feature/wood-phase-9-history`:
-   - Modified (tracked): `Cargo.lock`, `crates/engine/Cargo.toml`, `crates/engine/src/lib.rs`,
-     `crates/ui-egui/src/lib.rs`, `apps/cadcraft/src/main.rs`, `CHANGELOG.md`,
-     `plans/WoodCraft_Decisions.md` (two new numbered entries, 22 and 23).
-   - New (untracked, need `git add`): `crates/engine/src/history.rs`,
-     `crates/ui-egui/src/history.rs`, `changes/phase-9.md`.
-   - **Not ours, leave alone:** `.vs/` (pre-existing, unrelated). `plans/RESTART_NOTES.md` itself
-     is NOT committed — `plans/` is gitignored per `CLAUDE.md`'s "`plan/` is gitignored
-     (local only)" (this fork spells it `plans/`, same rule).
+4. **Committed.** Commit `ba613b6` on `feature/wood-phase-9-history`: "Add Phase 9: local git
+   history for .wood project files" (11 files changed, 772 insertions, 129 deletions). Includes
+   this file (`plans/RESTART_NOTES.md`) — confirmed `plans/` is actually tracked in this fork
+   (not gitignored, despite upstream's own singular `plan/` folder being gitignored — a
+   different folder, don't confuse the two). **Not pushed** (never push without being asked) and
+   **not merged to `main`** (only after Chris tests this phase and says "merge phase 9").
+   `.vs/` remains untracked, correctly left alone.
 5. **Changelog already updated** (this checkpoint) — `CHANGELOG.md`'s `[Unreleased]` section now
    has both the Phase 9 entry and a backfilled Phase 8 entry that its own commit had skipped
    (logged as decision 23 in `plans/WoodCraft_Decisions.md`). Include this file in the commit.
@@ -151,20 +148,22 @@ on any library source change — this is expected cargo behavior, not a bug). Sa
 
 ## Next steps once resumed
 
-1. Build and the scoped `history` unit tests are both confirmed green (see above) — no need to
-   redo either unless something changed since.
-2. Run `cargo clippy -p cadcraft-engine -p cadcraft-ui-egui --all-targets -j 6` and
-   `cargo xtask layers` (git2 and the new ui-egui files should not violate layering: `engine` is
-   L4, ui-egui is L5, both already allowed to depend on anything below them).
-3. Decide/confirm with Chris (or note as a logged decision in `plans/WoodCraft_Decisions.md` if
-   he's away, per §0) whether the `gitTimerMinutes` settings read belongs in Phase 9 now or
-   waits for Phase 12 as judged above.
-4. Add a `CHANGELOG.md` `[Unreleased]` entry describing Phase 9 in plain user-facing language.
-5. Write `changes/phase-9.md` using `changes/phase-8.md`'s section structure.
-6. Run `cargo xtask ci` (fmt, clippy -D warnings, tests, assets, layers, wasm) before committing.
-7. Commit on `feature/wood-phase-9-history` (never on `main`). Tell Chris in plain words what now
-   works, per `plans/WoodCraft_Context.md` §8. Do not merge, push, or delete anything without him
-   saying so.
-8. Once Phase 9 is confirmed and Chris says "merge phase 9," merge into `main` and then move to
-   Phase 10 (or 10a/11, per the plan's stated dependency order — 9 and 10 "can move any time
-   after Phase 1").
+Phase 9 is code-complete and committed (`ba613b6`, scoped checks all green — see above). What's
+left:
+
+1. **Owed before merging to `main`:** a full-workspace test run (`cargo test --workspace` or
+   `cargo xtask ci`), which this session could not complete in reasonable time on this machine
+   (see the environment finding at the top of this file). Run it in a dedicated window, alone,
+   with nothing else touching `/mnt/d` cargo state concurrently, and budget many hours. Don't
+   assume it's hung if it's still spawning/changing rustc processes.
+2. Tell Chris in plain words what now works (git history for `.wood` projects — commits on a
+   timer or on a new part, commits on exit, never pushes), per `plans/WoodCraft_Context.md` §8.
+3. Once Chris has tested it and says "merge phase 9" (and the full test run above has passed),
+   merge `feature/wood-phase-9-history` into `main`. Never merge, push, or delete a branch
+   without him saying so first.
+4. Then move to Phase 10 (layout tools) or Phase 10a/11, per the plan's dependency order — "9 and
+   10 can move any time after Phase 1."
+5. Phase 12 (not yet started) will need to: add a `cadcraft-wood` dependency to `crates/ui-egui`,
+   load `WoodSettings` at startup, and call `cadcraft_engine::history::set_git_timer_minutes` with
+   the loaded `gitTimerMinutes` value (and again whenever the settings dialog changes it) — see
+   decision 22 in `plans/WoodCraft_Decisions.md` for why this was deferred rather than done now.
