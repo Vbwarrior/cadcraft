@@ -18,6 +18,7 @@ mod finite;
 pub mod grip_dims;
 pub mod grips;
 mod guard;
+pub mod history;
 pub mod lisp;
 pub mod mtext_edit;
 pub mod pointmod;
@@ -699,6 +700,9 @@ pub struct Session {
     /// asks again. Nothing about it is saved in the file."). Session-only: never part of
     /// `Drawing`/`WoodData`, never saved, never carried by undo/redo.
     pub acknowledged_wood_warnings: std::collections::HashSet<String>,
+    /// WoodCraft Phase 9: tracks commands run since the last git commit of each open `.wood`
+    /// project, for the background timer's commit message ([`history::Historian`]).
+    pub history: history::Historian,
 }
 
 impl Default for Session {
@@ -749,6 +753,7 @@ impl Session {
             lisp_last: None,
             hatch_picks: None,
             acknowledged_wood_warnings: std::collections::HashSet::new(),
+            history: history::Historian::new(),
         }
     }
     pub fn new_drawing(&mut self, metric: bool) -> usize {
@@ -929,16 +934,23 @@ impl Session {
             (r, _) => r,
         };
         let grouped = self.lisp_groups_undo();
+        let mut changed: Option<(u64, Option<String>)> = None;
         if spec.undoable
             && let Some((doc, sel, uid)) = before
             && let Some(st) = self.docs.iter_mut().find(|d| d.uid == uid)
             && !Arc::ptr_eq(&doc, &st.doc)
         {
+            changed = Some((st.uid, st.path.clone()));
             // Inside a LISP routine the routine's single undo step records it.
             if !grouped {
                 st.push_undo(Snapshot { label: spec.label.to_string(), doc, selection: sel });
             }
             st.revision += 1;
+        }
+        if let Some((uid, path)) = changed {
+            // WoodCraft Phase 9: a command that changed the drawing, for the next git commit's
+            // message. A non-`.wood` project is filtered out inside `record_command` itself.
+            self.history.record_command(uid, path.as_deref(), spec.id);
         }
         result
     }
@@ -1319,11 +1331,18 @@ impl Session {
             }
             return;
         }
+        let mut changed: Option<(u64, Option<String>)> = None;
         if let Ok(st) = self.state_mut()
             && !Arc::ptr_eq(&run.before, &st.doc)
         {
+            changed = Some((st.uid, st.path.clone()));
             st.push_undo(Snapshot { label: label.to_string(), doc: run.before, selection: run.selection_before });
             st.revision += 1;
+        }
+        if let Some((uid, path)) = changed {
+            // WoodCraft Phase 9: an interactive command that changed the drawing, for the next
+            // git commit's message. A non-`.wood` project is filtered out in `record_command`.
+            self.history.record_command(uid, path.as_deref(), &run.id);
         }
     }
 

@@ -60,6 +60,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A warnings engine: a running, computed list of fastener, joint fit and build-size warnings
   across a drawing's wood parts, with commands to read it and to acknowledge or un-acknowledge
   one warning for the current session.
+- An export command that writes a project folder: a `project.json` listing every wood part
+  (outline, instance count and properties) plus one OpenSCAD file per part with its holes and
+  cuts carved out. Export can be blocked while an unacknowledged fastener warning exists, and an
+  override lasts for one export only. An optional check can run OpenSCAD itself to confirm each
+  part's file renders.
+- Local git history for WoodCraft project files: a background timer commits a `.wood` project's
+  file to its own local git repository whenever it has unsaved changes, with the commit message
+  listing what was done since the last commit. Adding a new part commits right away instead of
+  waiting for the timer. The project also commits on normal exit. Nothing is ever pushed anywhere.
 
 ## [0.10.0] - 2026-10-23
 

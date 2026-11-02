@@ -97,6 +97,7 @@ impl eframe::App for App {
     fn on_exit(&mut self) {
         self.persist_workspace(true);
         self.cad.shutdown_autosave();
+        self.cad.shutdown_history();
     }
     /// Preferences (the interface theme) survive restarts; window and egui state are not kept.
     fn save(&mut self, storage: &mut dyn eframe::Storage) {

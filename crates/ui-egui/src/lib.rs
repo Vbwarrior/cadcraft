@@ -23,6 +23,7 @@ pub mod credits;
 pub mod dialogs;
 pub mod docking;
 pub mod hatchdlg;
+pub mod history;
 mod mtext_editor;
 pub mod spacemouse;
 // The External References palette.
@@ -587,6 +588,7 @@ impl CadApp {
         managers::plot_window_resume(self, ctx);
         hatchdlg::resume(self);
         self.autosave_tick(ctx);
+        self.history_tick(ctx);
         menus::shortcuts(self, ctx);
         #[cfg(not(target_arch = "wasm32"))]
         for f in ctx.input(|i| i.raw.dropped_files.clone()) {
