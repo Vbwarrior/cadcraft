@@ -3,9 +3,10 @@ Copyright (c) 2026 ArtCraft Team and the CADCraft contributors.
 Licensed under the MIT License or the Apache License, Version 2.0, at your option
 (LICENSE-MIT, LICENSE-APACHE).
 
-The ArtCraft name, wordmark and logos in docs/brand/ are trademarks of the ArtCraft Team. They are
-not open source and are not covered by the license above; their terms are in
-docs/brand/LICENSE-brand.txt.
+WoodCraft is a fork of CADCraft (https://github.com/storytold/cadcraft) adding wood-specific
+drafting. It exports part geometry to OpenSCAD (https://openscad.org), run as a separate process
+that is not bundled with WoodCraft and is licensed separately, under the GNU General Public
+License, version 2 or later.
 
 Third-party material
 
