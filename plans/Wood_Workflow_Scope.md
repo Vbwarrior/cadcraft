@@ -11,7 +11,7 @@ Replaces the Oct 21 draft. It does not change `Designer_Spec_v2.md`, `Designer_P
 | **WoodCraft (WC)** | Independent 2D wood drafting with the layout tools. A fork of storytold/cadcraft. No 3D. | Rust/egui |
 
 - **No cross talk.** No shared database. WC exports files. WP or MM pull them in on their own terms. Changes made in WP never change the WC original.
-- **WoodCraft repo:** `D:\Rust\cadcraft`, fork `Vbwarrior/cadcraft`, upstream `storytold/cadcraft`, working branch `feature/wood-workflow`. Its own repo.
+- **WoodCraft repo:** `~/dev/CadCraft` (inside WSL Ubuntu), fork `Vbwarrior/cadcraft`, upstream `storytold/cadcraft`, working branch `feature/wood-workflow`. Its own repo.
 - **Standard 2D CAD stays untouched.** Wood rules live in their own module and tab.
 - **Browser (WASM) build:** ignored.
 

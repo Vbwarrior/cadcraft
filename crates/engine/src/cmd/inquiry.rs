@@ -99,7 +99,7 @@ fn point3_req(s: &Session, cmd: &str, p: &Value, key: &str) -> Result<Vec3> {
     Ok(Vec3::new(q.x, q.y, z.unwrap_or_else(|| z_at(s, q))))
 }
 
-fn run_dist(s: &mut Session, p: &Value) -> Result<Value> {
+pub(crate) fn run_dist(s: &mut Session, p: &Value) -> Result<Value> {
     let a = point3_req(s, "dist", p, "p1")?;
     let b = point3_req(s, "dist", p, "p2")?;
     let d = b - a;

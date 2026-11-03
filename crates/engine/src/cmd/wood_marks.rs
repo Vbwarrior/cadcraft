@@ -44,7 +44,7 @@ fn face_param(cmd: &str, p: &Value) -> Result<Face> {
     }
 }
 
-fn face_label(f: Face) -> &'static str {
+pub(super) fn face_label(f: Face) -> &'static str {
     match f {
         Face::A => "A",
         Face::B => "B",

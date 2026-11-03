@@ -85,3 +85,11 @@ Every decision made so far, so Claude Code never asks twice. Claude Code adds a 
     commit (per the global Changelog Rules' "do not skip entries for small fixes") rather than
     leaving the gap. Nothing else in the changelog was reordered or reworded.
 
+24. **(Nov 3, 2026, Chris)** The "Chris tests and validates before merge" gate (§8) is about
+    phases with something to actually click or drive by hand. A backend-only phase (commands
+    only, nothing in the UI yet — true for everything before Phase 12) has nothing Chris can
+    interact with beyond the command line or control channel, so for those, passing unit tests
+    plus a clean `cargo xtask ci` counts as validated; ask to merge instead of waiting on
+    hands-on testing the phase doesn't support. The full gate applies again once a phase adds a
+    UI. Recorded in `plans/WoodCraft_Context.md` §8. First applied to merge Phase 10.
+

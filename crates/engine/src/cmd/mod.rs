@@ -55,6 +55,7 @@ mod wood_file;
 mod wood_hardware;
 mod wood_holes;
 mod wood_joints;
+mod wood_layout;
 mod wood_marks;
 mod wood_query;
 mod wood_settings;
@@ -232,6 +233,7 @@ pub fn command_specs() -> &'static [CommandSpec] {
         v.extend(wood_hardware::specs());
         v.extend(wood_holes::specs());
         v.extend(wood_joints::specs());
+        v.extend(wood_layout::specs());
         v.extend(wood_marks::specs());
         v.extend(wood_query::specs());
         v.extend(wood_settings::specs());
