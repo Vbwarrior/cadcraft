@@ -16,9 +16,9 @@ Every decision made so far, so Claude Code never asks twice. Claude Code adds a 
 10. **Property names:** exactly as in `WoodCraft_Property_Names.xlsx`.
 11. **Build order:** back end first and everything wired as commands; UI (buttons, panels, menus, layout, entering wood mode) last, in Phase 12, placed by Chris.
 
-12. **Model Warehouse (library of imported models), lives in WoodCraft.** A folder on disk, default `%APPDATA%\WoodCraft\warehouse\` (a setting). Every subfolder is a category; the UI shows folders as buttons, drilling down, until the models show as thumbnails. A model's folder holds its 3D file (Collada `.dae` preferred, `.obj` fallback), its icon (made by Chris) and a small JSON (including the top-view outline). WoodCraft only reads the warehouse. The back end (scan, list, place, export) is Phase 10a; the buttons and thumbnail view are Phase 12.
+12. **Model Warehouse (library of imported models), lives in WoodCraft.** A folder on disk, default `%APPDATA%\Workshop\warehouse\` (a setting). Every subfolder is a category; the UI shows folders as buttons, drilling down, until the models show as thumbnails. A model's folder holds its 3D file (Collada `.dae` preferred, `.obj` fallback), its icon (made by Chris) and a small JSON (including the top-view outline). WoodCraft only reads the warehouse. The importer is the only writer. The back end (scan, list, place, export) is Phase 10a; the buttons and thumbnail view are Phase 12.
 13. **Placing a warehouse model:** a flat top-view outline goes in the drawing, with the 3D model linked to it. On export the used models are copied into the export folder and listed in `project.json`.
-14. **Importer:** a separate small C# / WPF app (see `Workshop_Decisions.md`) puts models into the warehouse, links the icon, makes the top-view outline. Units are asked and the resulting size confirmed; meshes are not simplified.
+14. **Importer:** see `Workshop_Decisions.md` item 14 and `plans/Warehouse_Plan.md`.
 15. **Settings:** each program has its own file. WoodCraft's is `%APPDATA%\WoodCraft\settings.json`.
 16. **Key bindings** (for the UI pass): Ctrl plus a letter, or Ctrl+Shift plus a letter; stored in the settings file.
 17. **Branches and merging:** one branch per phase, stacked in order. Chris validates a phase and says "merge phase N"; only then it merges into `main`, in phase order. Unvalidated phases stay on their branches. No push.
@@ -117,4 +117,13 @@ Every decision made so far, so Claude Code never asks twice. Claude Code adds a 
     folder setting (`warehouseFolder` in WoodCraft's settings file) defaults to `None`, meaning
     the per-platform default location next to the settings file itself (a `warehouse` folder
     there), per `WoodCraft_Decisions.md` item 12's `%APPDATA%\WoodCraft\warehouse\` default.
+
+    **Superseded (Nov 3, 2026):** this guessed `model.json` shape, and the `{ model, name }`
+    component record in item 25, are replaced by the real format Chris wrote down the same day
+    in `plans/Warehouse_Plan.md` and `plans/Warehouse_Model_JSON_Draft.md` (masters, models and
+    meshes; `family`/`revision`; typed search keys; icon views and layouts). That format is a
+    draft, frozen only at step W0 — nothing builds against it yet. The Phase 10a code already
+    merged (storing only a warehouse path and display name, no `family`/`revision`) will need to
+    change once W0 lands. Left here rather than rewritten, since items 25 and 26 are a record of
+    what was decided and why at the time, not a live spec.
 

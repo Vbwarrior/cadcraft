@@ -109,13 +109,19 @@ Reuse CADCraft first: distance and polar entry, polar tracking, XLINE and RAY. B
 
 ## Phase 10a: Model Warehouse back end
 
-1. Setting for the warehouse folder (default `%APPDATA%\WoodCraft\warehouse\`).
+See `plans/Warehouse_Plan.md` and `plans/Warehouse_Model_JSON_Draft.md` for the full design (masters, models and meshes; family/revision history; categories with typed search keys; icon views and layouts). Both are drafts: the JSON format is not frozen until Chris settles `Warehouse_Model_JSON_Draft.md`'s open items (step W0). Nothing below is built against that format until then.
+
+1. Setting for the warehouse folder (default `%APPDATA%\Workshop\warehouse\`).
 2. Commands that return the folder tree (categories), the models in a folder (name, icon path, size) and one model's details.
 3. A command that places a model: puts its flat top-view outline (from the model's JSON) in the drawing as a part-like block, with a link to the 3D model.
 4. Export copies the models the project uses into the export folder and lists them in `project.json` (the JSON draft gets a `components` list; record the change in `changes/` and `plans/`).
 5. Tests with a small sample warehouse folder.
+6. A search command: each search key has a From/To pair — one filled means equals (within a small tolerance), both filled means an inclusive range, both empty means the key is ignored. Compared in millimetres. No match returns the closest entries, marked "closest". Shows the highest revision of each family. The full rule is in `Warehouse_Plan.md`'s "Search" section; do not restate or diverge from it here, since the same rule is also implemented in WorkShop Pro and Model Maker and must match exactly.
+7. The link to a placed model, and each entry in `project.json`'s `components` list, must store the model's `family` and `revision` (not just its warehouse path).
+8. A query command that reports whether a placed model has a higher revision available in the warehouse. It only reports — it never switches the placed model's revision by itself.
+9. A missing model gives a clear "model not found" message. It never crashes.
 
-The importer that fills the warehouse is a separate C# / WPF app (see `Workshop_Decisions.md`), not part of this plan.
+The importer that fills the warehouse is a separate C# / WPF app (see `Workshop_Decisions.md` item 14 and `plans/Warehouse_Plan.md`), not part of this plan. It is the only writer; WoodCraft, WorkShop Pro and Model Maker only read the warehouse.
 
 ## Phase 11: Branding and housekeeping
 
