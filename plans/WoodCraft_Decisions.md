@@ -93,3 +93,28 @@ Every decision made so far, so Claude Code never asks twice. Claude Code adds a 
     hands-on testing the phase doesn't support. The full gate applies again once a phase adds a
     UI. Recorded in `plans/WoodCraft_Context.md` §8. First applied to merge Phase 10.
 
+25. **(Nov 3, 2026, Chris)** Phase 10a storage: a placed warehouse model (hinge, knob, slide,
+    etc.) is hardware the user bought, not a wood part being cut, so it is never added to
+    `WoodData.parts`/`WOODCRAFT_PARTS`. It gets its own hidden DXF record, `WOODCRAFT_COMPONENTS`
+    (new XRECORD, key `WOODCRAFT_COMPONENTS`, same read/write pattern as `crates/wood/src/
+    store.rs`'s `WOODCRAFT_PARTS`), listing every placed instance by its own id — the block name
+    of the insert that carries its flat outline in the drawing, exactly like a part's GUID is its
+    block name — against `{ model, name }`: the warehouse path it was placed from, and its
+    display name at the time it was placed. Export's `components` list
+    (`plans/WoodCraft_Part_JSON_Draft.md` "Components (Phase 10a)") reads this record the same
+    way `woodexport` reads `WOODCRAFT_PARTS` today, and copies each component's 3D file into the
+    export folder alongside the per-part SCAD files.
+
+26. **(Nov 3, 2026)** Phase 10a also needed a warehouse model's own JSON (`model.json` in each
+    model's folder) and none was drafted anywhere, so the simplest shape was chosen and written
+    down rather than asking: `{ "schemaVersion": 1, "name": "...", "outline": [[x,y,bulge],...] }`
+    — the outline in the same `[x, y, bulge]` convention Document B's part `outline` already
+    uses. The model's 3D file and icon are found by plain file name in the model's own folder
+    (`model.dae` preferred, `model.obj` fallback; `icon.png` if present) rather than referenced
+    in the JSON, so nothing there can point at a missing file. Recorded in
+    `crates/wood/src/warehouse.rs`'s module doc; the separate C# / WP importer app
+    (`Workshop_Decisions.md` item 14) needs to write folders matching this shape. The warehouse
+    folder setting (`warehouseFolder` in WoodCraft's settings file) defaults to `None`, meaning
+    the per-platform default location next to the settings file itself (a `warehouse` folder
+    there), per `WoodCraft_Decisions.md` item 12's `%APPDATA%\WoodCraft\warehouse\` default.
+

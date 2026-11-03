@@ -19,7 +19,8 @@ pub fn specs() -> Vec<CommandSpec> {
             .params(
                 "{straightnessTolerance?, units?: \"in\"|\"mm\", minimumJointSpacing?, \
                  jointToleranceByType?: {type: number}, buildSizeLimits?: {smallest?, middle?, largest?}, \
-                 blockExportOnFastenerWarnings?: bool, gitTimerMinutes?} → the settings file's contents after the change",
+                 blockExportOnFastenerWarnings?: bool, gitTimerMinutes?, warehouseFolder?: string|null} → \
+                 the settings file's contents after the change",
             )
             .enabled(always)
             .noundo(),
@@ -117,6 +118,11 @@ fn run_woodsettingsset(_s: &mut Session, p: &Value) -> Result<Value> {
         .map(|v| v.as_bool().ok_or_else(|| bad(cmd, "`blockExportOnFastenerWarnings` must be a bool")))
         .transpose()?;
     let git_timer = positive_number(cmd, p, "gitTimerMinutes")?;
+    let warehouse_folder = match p.get("warehouseFolder") {
+        None => None,
+        Some(Value::Null) => Some(None),
+        Some(v) => Some(Some(v.as_str().ok_or_else(|| bad(cmd, "`warehouseFolder` must be a string or null"))?.to_string())),
+    };
 
     let settings = cadcraft_wood::settings_store::update(|w| {
         if let Some(v) = straightness {
@@ -147,6 +153,9 @@ fn run_woodsettingsset(_s: &mut Session, p: &Value) -> Result<Value> {
         }
         if let Some(v) = git_timer {
             w.git_timer_minutes = v;
+        }
+        if let Some(v) = warehouse_folder {
+            w.warehouse_folder = v;
         }
         w.clone()
     })

@@ -223,3 +223,48 @@ fn missing_path_and_project_name_are_refused() {
         assert!(s.execute("woodexport", &json!({ "path": "/tmp/whatever" })).is_err());
     });
 }
+
+#[test]
+fn exporting_a_placed_component_lists_it_and_copies_its_model_file() {
+    with_settings(|| {
+        let n = SEQUENCE.fetch_add(1, Ordering::Relaxed);
+        let warehouse_dir = std::env::temp_dir().join(format!("woodcraft-export-warehouse-{}-{n}", std::process::id()));
+        let model_dir = warehouse_dir.join("Hardware/soss-100");
+        std::fs::create_dir_all(&model_dir).unwrap();
+        std::fs::write(model_dir.join("model.json"), r#"{"schemaVersion":1,"name":"SOSS 100","outline":[[0,0,0],[2,0,0],[2,1,0],[0,1,0]]}"#).unwrap();
+        std::fs::write(model_dir.join("model.dae"), "<dae/>").unwrap();
+
+        let mut s = Session::empty();
+        s.open_drawing(Drawing::new_imperial(), "wood", None);
+        s.execute("woodsettingsset", &json!({ "warehouseFolder": warehouse_dir.display().to_string() })).unwrap();
+        let placed = s.execute("woodwarehouseplace", &json!({ "path": "Hardware/soss-100", "at": [0.0, 0.0] })).unwrap();
+        let component_id = placed["component"].as_str().unwrap().to_string();
+
+        let dir = export_dir();
+        s.execute("woodexport", &json!({ "path": dir.to_string_lossy(), "projectName": "P" })).unwrap();
+        let project: serde_json::Value = serde_json::from_str(&std::fs::read_to_string(dir.join("project.json")).unwrap()).unwrap();
+        let components = project["components"].as_array().unwrap();
+        assert_eq!(components.len(), 1);
+        assert_eq!(components[0]["id"], component_id);
+        assert_eq!(components[0]["model"], "Hardware/soss-100");
+        assert_eq!(components[0]["name"], "SOSS 100");
+        let model_file = components[0]["modelFile"].as_str().unwrap();
+        assert!(dir.join(model_file).is_file(), "the copied model file should exist at {model_file}");
+
+        let _ = std::fs::remove_dir_all(&dir);
+        let _ = std::fs::remove_dir_all(&warehouse_dir);
+    });
+}
+
+#[test]
+fn exporting_with_no_components_leaves_the_components_array_out() {
+    with_settings(|| {
+        let mut s = Session::empty();
+        s.open_drawing(Drawing::new_imperial(), "wood", None);
+        let dir = export_dir();
+        s.execute("woodexport", &json!({ "path": dir.to_string_lossy(), "projectName": "P" })).unwrap();
+        let project: serde_json::Value = serde_json::from_str(&std::fs::read_to_string(dir.join("project.json")).unwrap()).unwrap();
+        assert!(project.get("components").is_none());
+        let _ = std::fs::remove_dir_all(&dir);
+    });
+}

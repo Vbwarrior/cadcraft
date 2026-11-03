@@ -34,6 +34,10 @@ pub struct WoodSettings {
     pub common_size_presets: Vec<CommonSizePreset>,
     /// The drop-down lists.
     pub lists: WoodLists,
+    /// The Model Warehouse folder. `None` (the default) means the per-platform default location
+    /// (`%APPDATA%\WoodCraft\warehouse\` and its equivalents); set to use a different folder.
+    #[serde(rename = "warehouseFolder", default, skip_serializing_if = "Option::is_none")]
+    pub warehouse_folder: Option<String>,
 }
 
 impl Default for WoodSettings {
@@ -48,6 +52,7 @@ impl Default for WoodSettings {
             git_timer_minutes: 1.0,
             common_size_presets: seed_common_sizes(),
             lists: WoodLists::seeded(),
+            warehouse_folder: None,
         }
     }
 }

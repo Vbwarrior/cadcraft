@@ -304,6 +304,37 @@ Common size presets come seeded with standard lumber sizes (1x2 through 2x8 at r
 dimensions); the six lists come seeded from WoodCraft's own property sheet. All of the above are
 refused, with nothing changed, on a bad or duplicate name.
 
+### Layout tools
+
+Shop-named wrappers over CADCraft's own measuring and drafting commands; none of them needed
+new geometry.
+
+| Command | Parameters | What it does |
+|---|---|---|
+| `woodtapemeasure` | `{p1, p2}` | The shop name for `dist`: distance and angle between two points. |
+| `woodtsquare` | `{handle?, edge, at}` | A construction line through `at`, square to a named edge of a wood part. |
+| `woodcompass` | `{center, radius}` or `{center, diameter}` | The shop name for `circle`. |
+| `woodchalkline` | `{base, through}` | The shop name for `ray`: an unbounded line through two points. |
+| `woodmarkstransfer` | `{handle?}` (default: the selection) | Every mark on a part (orientation, then reference marks), flattened into one ordered list for marking onto the wood. |
+
+### Model Warehouse
+
+WoodCraft reads a folder of pre-made 3D hardware models (hinges, knobs, drawer slides, and the
+like), filled by a separate importer app, never written by WoodCraft itself. Each model's folder
+holds a 3D file, an optional icon, and a small JSON file with its flat top-view outline. The
+warehouse folder defaults to `%APPDATA%\WoodCraft\warehouse\` (the platform equivalent
+elsewhere), or the `warehouseFolder` setting if one is set.
+
+| Command | Parameters | What it does |
+|---|---|---|
+| `woodwarehousefolders` | `{under?}` | The categories (subfolders) directly inside the warehouse root, or inside `under`. |
+| `woodwarehousemodels` | `{under}` | Every model directly inside a folder, plus any that could not be read. |
+| `woodwarehousemodeldetail` | `{path}` | One model's full detail: name, outline, icon, and 3D file. |
+| `woodwarehouseplace` | `{path, at}` | Draws the model's outline at `at` and links it to the warehouse model. A placed model is hardware, not a wood part — it is tracked separately and never appears in `woodparts`. |
+
+A placed model's 3D file is copied into the export folder alongside the per-part SCAD files, and
+listed in `project.json`'s `components` array.
+
 ### Where this is headed
 
 WoodCraft is being built phase by phase: outline analysis for edge names is done; part

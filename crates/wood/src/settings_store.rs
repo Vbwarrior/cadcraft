@@ -126,6 +126,17 @@ pub fn get() -> Result<WoodSettings, SettingsError> {
     read(&settings_path()?)
 }
 
+/// The Model Warehouse folder: the `warehouseFolder` setting if one is set, otherwise the
+/// per-platform default (a `warehouse` folder next to the settings file). `None` only when no
+/// config folder could be found for this platform and no setting override is in place either.
+pub fn warehouse_dir() -> Result<PathBuf, SettingsError> {
+    let settings = get()?;
+    if let Some(folder) = settings.warehouse_folder.filter(|f| !f.trim().is_empty()) {
+        return Ok(PathBuf::from(folder));
+    }
+    Ok(settings_path()?.parent().ok_or(SettingsError::NoConfigDir)?.join("warehouse"))
+}
+
 /// Read, change and write back.
 pub fn update<R>(change: impl FnOnce(&mut WoodSettings) -> R) -> Result<R, SettingsError> {
     let path = settings_path()?;

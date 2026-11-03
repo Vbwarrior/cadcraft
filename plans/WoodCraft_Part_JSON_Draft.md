@@ -93,6 +93,27 @@ MyProject/
 - `outline` is a closed path of `[x, y, bulge]` points, the same way CADCraft stores polylines **(proposal)**. A bulge of 0 is a straight segment and anything else is an arc. It comes from the drawing geometry, so it is written only on export.
 - There is no WP project ID. WP assigns its own when the project is imported.
 
+### Components (Phase 10a, Nov 3, 2026)
+
+Document B also gets a `components` array (left out entirely when the project has none), one entry per placed Model Warehouse model (hinges, knobs, slides — hardware the user bought, not a wood part):
+
+```json
+"components": [
+  {
+    "id": "7c1b0e20-0000-4000-8000-000000000001",
+    "model": "Hardware/Hinges/soss-100",
+    "name": "SOSS 100 invisible hinge",
+    "modelFile": "models/7c1b0e20-0000-4000-8000-000000000001-model.dae"
+  }
+]
+```
+
+- `id` is the component's own id in the drawing (like a part's GUID, but never added to `parts`).
+- `model` is the warehouse model's path, relative to the warehouse folder, so WP or MM can look up the same model again if the warehouse is also visible to them.
+- `name` is the display name the model had when it was placed.
+- `modelFile` is the 3D file copied into the export's `models/` folder (named `<id>-<original file name>` to avoid colliding with a part's own `<guid>.scad`), or `null` if the warehouse model could no longer be found at export time (its folder moved or removed, or no warehouse folder configured).
+- Placement itself (which model, and where in the drawing) is stored only in the drawing, in its own `WOODCRAFT_COMPONENTS` record, kept separate from `WOODCRAFT_PARTS` (`plans/WoodCraft_Decisions.md` item 25).
+
 ## 5. Decisions (all eight settled, Oct 22)
 
 1. **Units and numbers:** one `units` value per document, plain decimals. The user interface shows fractions.

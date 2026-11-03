@@ -5,6 +5,7 @@
 //! drawing's `foreign` data, so undo, redo, copy-on-write and Save carry it with the geometry.
 #![deny(clippy::unwrap_used, clippy::expect_used, clippy::panic, clippy::unimplemented, clippy::todo, clippy::unreachable)]
 
+pub mod components;
 pub mod data;
 pub mod edges;
 pub mod export;
@@ -12,14 +13,17 @@ pub mod guid;
 pub mod settings_data;
 pub mod settings_store;
 pub mod store;
+pub mod warehouse;
 pub mod warnings;
 
+pub use components::{Component, ComponentError, WoodComponents};
 pub use data::{CommonSize, Part, WoodData};
 pub use edges::{Edge, EdgeError, Side};
-pub use export::{Outline, OutlinePoint, ProjectDocument, ProjectInfo, part_entry, scad_for_part};
+pub use export::{Outline, OutlinePoint, ProjectDocument, ProjectInfo, component_entry, part_entry, scad_for_part};
 pub use settings_data::{BuildSizeLimits, CommonSizePreset, ListName, WoodLists, WoodSettings};
 pub use settings_store::SettingsError;
 pub use store::{KEY, WoodError};
+pub use warehouse::{Category, ModelDetail, ModelSummary, WarehouseError};
 
 /// The wood file extension (the content is DXF).
 pub const EXTENSION: &str = "wood";
