@@ -78,6 +78,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   back to the warehouse model. Export now also copies each placed model's 3D file into the
   export folder and lists it in `project.json`.
 
+### Changed
+
+- `NOTICE` now credits OpenSCAD, the separate process WoodCraft exports part geometry to.
+
+### Removed
+
+- The ArtCraft brand assets (`docs/brand/`) and their attribution entries and license notice.
+
 ## [0.10.0] - 2026-10-23
 
 Baseline entry matching the version already in `Cargo.toml` when changelog tracking started.

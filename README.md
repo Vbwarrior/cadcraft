@@ -240,6 +240,14 @@ geometry). WoodCraft has no buttons, panels or menus yet — every one of its fe
 as a command first, so it can already be driven from the command line or JSON exactly like any
 other CADCraft command, while its interface is still being built.
 
+Wood-specific code lives in its own crate (`crates/wood`) and its own command files
+(`crates/engine/src/cmd/wood*.rs`), changing as little of standard CADCraft as possible, so this
+fork can keep merging in upstream CADCraft changes from
+[storytold/cadcraft](https://github.com/storytold/cadcraft). WoodCraft builds on CADCraft
+(this repository) and exports part geometry to [OpenSCAD](https://openscad.org), run as a
+separate process; OpenSCAD is not bundled (see `NOTICE`). The full plan is in
+`plans/WoodCraft_Context.md`.
+
 A **part** is a closed outline (a closed polyline or a circle) made into a wood part with
 `woodpart`: the outline becomes a named block and the properties you gave it (name, thickness,
 and so on) are stored with the drawing. The commands below work the same at the command line
