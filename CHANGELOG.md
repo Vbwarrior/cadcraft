@@ -69,6 +69,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   file to its own local git repository whenever it has unsaved changes, with the commit message
   listing what was done since the last commit. Adding a new part commits right away instead of
   waiting for the timer. The project also commits on normal exit. Nothing is ever pushed anywhere.
+- Layout tools under their shop names: Tape Measure, T-Square, Compass and Chalk Line, each
+  reusing CADCraft's own distance, construction-line, circle and ray commands. A command that
+  lists a wood part's orientation and reference marks together, in order, for marking onto the
+  wood.
+- The Model Warehouse back end: commands to list the warehouse folder's categories and models,
+  read one model's detail, and place a model's flat top-view outline into the drawing, linked
+  back to the warehouse model. Export now also copies each placed model's 3D file into the
+  export folder and lists it in `project.json`.
 
 ## [0.10.0] - 2026-10-23
 

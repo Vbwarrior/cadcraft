@@ -82,7 +82,10 @@ fn to_map(part: &Part) -> Map<String, Value> {
     }
 }
 
-/// The whole Document B, `project.json` (`WoodCraft_Part_JSON_Draft.md` §4).
+/// The whole Document B, `project.json` (`WoodCraft_Part_JSON_Draft.md` §4). `components` is
+/// the Phase 10a addition (`plans/WoodCraft_Implementation_Plan.md` Phase 10a item 4): the
+/// placed Model Warehouse components the project uses, with their 3D files copied alongside the
+/// per-part SCAD files.
 #[derive(Serialize)]
 pub struct ProjectDocument {
     #[serde(rename = "schemaVersion")]
@@ -92,6 +95,15 @@ pub struct ProjectDocument {
     pub property_list_version: u32,
     pub project: ProjectInfo,
     pub parts: Vec<Value>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub components: Vec<Value>,
+}
+
+/// One entry in Document B's `components` array: a placed warehouse model, its id (the
+/// component's own GUID, like a part's), and the model file copied into the export folder
+/// (`None` when the warehouse model had no 3D file to copy).
+pub fn component_entry(id: &str, model: &str, name: &str, model_path: Option<&str>) -> Value {
+    serde_json::json!({ "id": id, "model": model, "name": name, "modelFile": model_path })
 }
 
 #[derive(Serialize)]

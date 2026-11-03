@@ -5,9 +5,9 @@
 //! export asks again" — a successful export clears `Session::acknowledged_wood_warnings`).
 
 use cadcraft_doc::EntityKind;
-use cadcraft_wood::export::{Outline, ProjectDocument, ProjectInfo, part_entry, scad_for_part};
+use cadcraft_wood::export::{Outline, ProjectDocument, ProjectInfo, component_entry, part_entry, scad_for_part};
 use cadcraft_wood::warnings::{WarningKind, part_warnings};
-use cadcraft_wood::{settings_store, store};
+use cadcraft_wood::{components, settings_store, store};
 use serde_json::{Value, json};
 
 use super::wood_query::instances_of;
@@ -19,8 +19,9 @@ pub fn specs() -> Vec<CommandSpec> {
             .params(
                 "{path: folder, projectName: string, openscadCheck?: bool (default false)} → \
                  {path, parts: number, blocked?: [warning ids], openscad?: {ok, parts: [{part, ok, message?}]}}: \
-                 writes project.json and models/<guid>.scad; refused while unacknowledged fastener warnings exist \
-                 and the blockExportOnFastenerWarnings setting is on",
+                 writes project.json (parts plus the placed Model Warehouse components, each with its 3D file \
+                 copied into models/ alongside the per-part models/<guid>.scad) and models/<guid>.scad; \
+                 refused while unacknowledged fastener warnings exist and the blockExportOnFastenerWarnings setting is on",
             )
             .noundo(),
     ]
@@ -70,12 +71,17 @@ fn run_woodexport(s: &mut Session, p: &Value) -> Result<Value> {
         parts.push(part_entry(guid, part, &outline, instances, &model_rel));
     }
 
+    let component_data = components::get(doc).map_err(|e| EngineError::Other(e.to_string()))?;
+    let warehouse_root = settings_store::warehouse_dir().ok();
+    let components_list = copy_components(&component_data, warehouse_root.as_deref(), &models_dir, cmd)?;
+
     let document = ProjectDocument {
         schema_version: 1,
         units: data.units.clone(),
         property_list_version: data.property_list_version,
         project: ProjectInfo { name: project_name.to_string() },
         parts: parts.clone(),
+        components: components_list,
     };
     let json_text = serde_json::to_string_pretty(&document).map_err(|e| EngineError::Other(e.to_string()))?;
     let project_path = std::path::Path::new(path).join("project.json");
@@ -90,6 +96,37 @@ fn run_woodexport(s: &mut Session, p: &Value) -> Result<Value> {
         result["openscad"] = check;
     }
     Ok(result)
+}
+
+/// Phase 10a item 4: every placed component's 3D file copied into `models/` alongside the
+/// per-part SCAD files, and listed for Document B's `components` array. A component whose
+/// warehouse model can no longer be found (its folder removed since it was placed, or no
+/// warehouse folder configured at all) is still listed, with `modelFile` left `null`, rather
+/// than failing the whole export over one missing model file.
+fn copy_components(
+    data: &cadcraft_wood::WoodComponents,
+    warehouse_root: Option<&std::path::Path>,
+    models_dir: &std::path::Path,
+    cmd: &str,
+) -> Result<Vec<Value>> {
+    let mut out = Vec::new();
+    for (id, component) in &data.components {
+        let model_file =
+            warehouse_root.and_then(|root| cadcraft_wood::warehouse::model_detail(root, &component.model).ok()).and_then(|detail| detail.model_file);
+        let copied = match (&model_file, warehouse_root) {
+            (Some(rel), Some(root)) => {
+                let src = root.join(rel);
+                let file_name = src.file_name().ok_or_else(|| bad(cmd, format!("{rel}: no file name")))?;
+                let dest_rel = format!("models/{id}-{}", file_name.to_string_lossy());
+                std::fs::copy(&src, models_dir.join(format!("{id}-{}", file_name.to_string_lossy())))
+                    .map_err(|e| bad(cmd, format!("{}: {e}", src.display())))?;
+                Some(dest_rel)
+            }
+            _ => None,
+        };
+        out.push(component_entry(id, &component.model, &component.name, copied.as_deref()));
+    }
+    Ok(out)
 }
 
 /// Every fastener warning id that is neither fixed nor acknowledged this session, when the
