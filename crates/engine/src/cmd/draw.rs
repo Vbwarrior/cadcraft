@@ -151,7 +151,7 @@ fn run_pline(s: &mut Session, p: &Value) -> Result<Value> {
     added(s.add_entity(k)?)
 }
 
-fn run_circle(s: &mut Session, p: &Value) -> Result<Value> {
+pub(crate) fn run_circle(s: &mut Session, p: &Value) -> Result<Value> {
     let c = if let Some(center) = point_param(p, "center") {
         // Checked before `Circle::new`, which would turn a negative radius positive.
         let r = match size_param("circle", p, "radius", false)? {
@@ -251,7 +251,7 @@ fn run_point(s: &mut Session, p: &Value) -> Result<Value> {
     Ok(json!({ "handles": hs }))
 }
 
-fn run_ray(s: &mut Session, p: &Value) -> Result<Value> {
+pub(crate) fn run_ray(s: &mut Session, p: &Value) -> Result<Value> {
     let b = point_req("ray", p, "base")?;
     let t = point_req("ray", p, "through")?;
     let dir = (t - b).normalized();

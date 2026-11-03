@@ -64,7 +64,7 @@ fn run_woodedges(s: &mut Session, p: &Value) -> Result<Value> {
     Ok(json!({ "edges": edges.iter().map(edge_value).collect::<Vec<_>>() }))
 }
 
-enum Outline {
+pub(super) enum Outline {
     Polyline(Vec<cadcraft_doc::geom::PolyVertex>),
     Circle,
 }

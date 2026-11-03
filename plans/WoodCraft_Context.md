@@ -20,7 +20,7 @@ Chris is a woodworker splitting his tools into three independent programs. They 
 | WorkShop Pro (WP) | Real-wood project manager: importer, view-only 3D, assembler, light 2D composer with blemish marks. No CAD. | C# / WPF | Workshop repo. Later. |
 | **WoodCraft (WC)** | 2D wood drafting. **This repo.** No 3D. | Rust / egui | Fork of `storytold/cadcraft` |
 
-You are working in **WoodCraft**: the fork `Vbwarrior/cadcraft`, local folder `D:\Rust\CadCraft`, branch `feature/wood-workflow`. Upstream is `storytold/cadcraft`.
+You are working in **WoodCraft**: the fork `Vbwarrior/cadcraft`, local folder `~/dev/CadCraft` (inside WSL Ubuntu), branch `feature/wood-workflow`. Upstream is `storytold/cadcraft`.
 
 ## 2. The big rule
 
